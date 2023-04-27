@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Hello Extensions",
+  "name": "my extension",
   "description": "Base Level Extension",
   "version": "1.0",
   "action": {
-    "default_popup": "hello.html",
+    "default_popup": "popup.html",
     "default_icon": "icon.png"
   }
 }

@@ -1,4 +1,4 @@
-async function go_for_it(){
+async function show_tabGroups(){
     const groups = await chrome.windows.getAll({
     });
     
@@ -24,5 +24,5 @@ function enable_button(){
     });
 }
 
-await go_for_it();
+await show_tabGroups();
 enable_button();

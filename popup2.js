@@ -1,34 +1,34 @@
-const tabs = await chrome.tabGroups.query({
+const groups = await chrome.windows.getAll({
 });
 
 const collator = new Intl.Collator();
-//tabs.sort((a, b) => collator.compare(a.title, b.title));
+//groups.sort((a, b) => collator.compare(a.title, b.title));
 
 const template = document.getElementById('li_template');
 const elements = new Set();
-for (const tab of tabs) {
-  const element = template.content.firstElementChild.cloneNode(true);
+for (const group of groups) {
+    const element = template.content.firstElementChild.cloneNode(true);
 
-  const title = tab.title
-  //const pathname = new URL(tab.url).pathname.slice('/docs'.length);
+    //const title = group.title
+    //const pathname = new URL(group.url).pathname.slice('/docs'.length);
+    
+    //element.querySelector('.title').textContent = JSON.stringify(windowTitle);
+    element.querySelector('.content').textContent = JSON.stringify(group);
+    element.querySelector('a').addEventListener('click', async () => {
+        // need to focus window as well as the active group
+        //await chrome.tabs.update(tab.id, { active: true });
+        //await chrome.windows.update(group.windowId, { focused: true });
+    });
 
-  element.querySelector('.title').textContent = title;
-  //element.querySelector('.pathname').textContent = pathname;
-  element.querySelector('a').addEventListener('click', async () => {
-    // need to focus window as well as the active tab
-    //await chrome.tabs.update(tab.id, { active: true });
-    //await chrome.windows.update(tab.windowId, { focused: true });
-  });
-
-  elements.add(element);
+    elements.add(element);
 }
 document.querySelector('ul#output-list').append(...elements);
 
-const button = document.querySelector('button');
-button.addEventListener('click', async () => {
-  const tabIds = tabs.map(({ id }) => id);
-  if (tabIds.length) {
-    const group = await chrome.tabs.group({ tabIds });
-    await chrome.tabGroups.update(group, { title: 'DOCS' });
-  }
-});
+function enable_button(){
+    const button = document.querySelector('button');
+    button.addEventListener('click', async () => {
+        document.querySelector('p#notes').textContent = "you clicked the button";
+    });
+}
+
+enable_button();

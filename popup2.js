@@ -5,13 +5,10 @@ async function show_tabGroups(){
     const template = document.getElementById('li_template');
     const elements = new Set();
     for (const group of groups) {
-        const element = template.content.firstElementChild.cloneNode(true);
-        
+        const element = template.content.firstElementChild.cloneNode(true);  
         element.querySelector('.content').textContent = JSON.stringify(group);
-        element.querySelector('a').addEventListener('click', async () => {
-          
+        element.querySelector('a').addEventListener('click', async () => {        
         });
-        
         elements.add(element);
     }
     document.querySelector('ul#output-list').append(...elements);

@@ -7,16 +7,20 @@
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
+    <template id="template">
+      <h2 id="heading">no heading</h2>
+      <ul id="output-list">
+      </ul>
+    </template>
     <template id="li_template">
       <li>
-        <a>
-          <h3 id="title">template — Tab Title</h3>
-          <p id="content">template — Tab Pathname</p>
-        </a>
+        <h3 id="title">template — Tab Title</h3>
+        <p id="content">template — Tab Pathname</p>
       </li>
     </template>
 
-    <ul id="output-list"></ul>
+    <div id="output"></div>
+    
     <button>Button</button>
     <p id="notes">blank</p>
 

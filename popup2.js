@@ -27,5 +27,11 @@ function enable_button(){
 const groups = await chrome.tabGroups.query({});
 show({datas:groups,heading:"Tab Groups"});
 
+const windows = await chrome.windows.getAll({populate:true});
+show({datas:windows,heading:"Windows"});
+
+const current_window= await chrome.windows.getCurrent();
+document.querySelector('#output').append(`current window id: ${current_window.id}`);
+
 enable_button();
 

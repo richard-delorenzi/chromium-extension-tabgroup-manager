@@ -1,9 +1,9 @@
-function show(datas){
+function show({datas, heading}={}){
     const template = document.getElementById('template');
     const li_template = document.getElementById('li_template');
     
     const section = template.content.cloneNode(true);
-    section.querySelector('#heading').textContent = "tab datas";
+    section.querySelector('#heading').textContent = heading;
     const output_list=section.querySelector('ul#output-list');
     for (const data of datas) {
         const element = li_template.content.cloneNode(true);
@@ -25,8 +25,7 @@ function enable_button(){
 }
 
 const groups = await chrome.tabGroups.query({});
-show(groups);
+show({datas:groups,heading:"Tab Groups"});
 
-await show_tabGroups();
 enable_button();
 

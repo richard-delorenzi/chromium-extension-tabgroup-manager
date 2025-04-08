@@ -52,7 +52,7 @@ async function moveTabsToWindow(windowId){
             group => {
                 chrome.tabGroups.move(
                     group.id,
-                    { index: -1, windowId:windowId}
+                    { index: -1, windowId}
                 );
             }
         );
@@ -86,7 +86,7 @@ class Buttons {
 
 
 const groups = await chrome.tabGroups.query({});
-display({datas:groups,heading:"Tab Groups"});
+display({datas:groups,heading:"Debug—Tab Groups"});
 
 //const windows = await chrome.windows.getAll({populate:true});
 //display({datas:windows,heading:"Windows"});

@@ -40,21 +40,26 @@ async function storeWindowId(){
     return result;
 }
 
-function hide(){
-    document.querySelector('p#button-notes').textContent = "you clicked hide";
-}
-
-function show(){
-    document.querySelector('p#button-notes').textContent = "you clicked show";
-}
-
-function enable_buttons(){
-    document.querySelector('button#hide').addEventListener('click', async () => {
-        hide();
-    });
-    document.querySelector('button#show').addEventListener('click', async () => {
-        show();
-    });
+class Buttons {
+    constructor() {
+        this.enable_buttons();
+    }
+    hide(){
+        document.querySelector('p#button-notes').textContent = "you clicked hide";
+    }
+    
+    show(){
+        document.querySelector('p#button-notes').textContent = "you clicked show";
+    }
+    
+    enable_buttons(){
+        document.querySelector('button#hide').addEventListener('click', async () => {
+            this.hide();
+        });
+        document.querySelector('button#show').addEventListener('click', async () => {
+            this.show();
+        });
+    }
 }
 
 const id=await storeWindowId();
@@ -71,5 +76,5 @@ display({datas:windows,heading:"Windows"});
 const current_window= await chrome.windows.getCurrent();
 document.querySelector('#output').append(`current window id: ${current_window.id}`);
 
-enable_buttons();
+new Buttons();
 

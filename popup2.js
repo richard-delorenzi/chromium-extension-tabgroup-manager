@@ -40,27 +40,33 @@ async function storeWindowId(){
     return result;
 }
 
+async function moveTabsToWindow(windowId){
+    const tabGroups= await chrome.tabGroups.query({});
+    tabGroups.filter( group => group.title === "1" )
+        .forEach(
+            group => {
+                chrome.tabGroups.move(
+                    group.id,
+                    { index: -1, windowId:windowId}
+                );
+            }
+        );
+}
+
 class Buttons {
     constructor() {
         this.enable_buttons();
     }
     async hide(){
         document.querySelector('p#button-notes').textContent = "you clicked hide";
-        const storeId=await storeWindowId();
-        const tabGroups= await chrome.tabGroups.query({});
-        tabGroups.filter( group => group.title === "1" )
-            .forEach(
-                group => {
-                    chrome.tabGroups.move(
-                        group.id,
-                        { index: -1, windowId:storeId}
-                    );
-                }
-            );
+        const windowId=await storeWindowId();
+        moveTabsToWindow(windowId);
     }
     
-    show(){
-        document.querySelector('p#button-notes').textContent = "you clicked show";
+    async show(){
+        document.querySelector('p#button-notes').textContent = "you clicked show.";
+        const window=await chrome.windows.getCurrent();
+        moveTabsToWindow(window.id);
     }
     
     enable_buttons(){
@@ -73,16 +79,12 @@ class Buttons {
     }
 }
 
-const id=await storeWindowId();
-document.querySelector('#output').append(
-    PrettyJsonElementOf(id)
-);
 
-const groups = await chrome.tabGroups.query({});
-display({datas:groups,heading:"Tab Groups"});
+//const groups = await chrome.tabGroups.query({});
+//display({datas:groups,heading:"Tab Groups"});
 
-const windows = await chrome.windows.getAll({populate:true});
-display({datas:windows,heading:"Windows"});
+//const windows = await chrome.windows.getAll({populate:true});
+//display({datas:windows,heading:"Windows"});
 
 const current_window= await chrome.windows.getCurrent();
 document.querySelector('#output').append(`current window id: ${current_window.id}`);

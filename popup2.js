@@ -4,7 +4,7 @@ function PrettyJsonElementOf(obj){
     return result;
 }
 
-function show({datas, heading}={}){
+function display({datas, heading}={}){
     const template = document.getElementById('template');
     const li_template = document.getElementById('li_template');
     
@@ -39,11 +39,21 @@ async function storeWindowId(){
     );
     return result;
 }
-    
-function enable_button(){
-    const button = document.querySelector('button');
-    button.addEventListener('click', async () => {
-        document.querySelector('p#button-notes').textContent = "you clicked the button";
+
+function hide(){
+    document.querySelector('p#button-notes').textContent = "you clicked hide";
+}
+
+function show(){
+    document.querySelector('p#button-notes').textContent = "you clicked show";
+}
+
+function enable_buttons(){
+    document.querySelector('button#hide').addEventListener('click', async () => {
+        hide();
+    });
+    document.querySelector('button#show').addEventListener('click', async () => {
+        show();
     });
 }
 
@@ -53,13 +63,13 @@ document.querySelector('#output').append(
 );
 
 const groups = await chrome.tabGroups.query({});
-show({datas:groups,heading:"Tab Groups"});
+display({datas:groups,heading:"Tab Groups"});
 
 const windows = await chrome.windows.getAll({populate:true});
-show({datas:windows,heading:"Windows"});
+display({datas:windows,heading:"Windows"});
 
 const current_window= await chrome.windows.getCurrent();
 document.querySelector('#output').append(`current window id: ${current_window.id}`);
 
-enable_button();
+enable_buttons();
 

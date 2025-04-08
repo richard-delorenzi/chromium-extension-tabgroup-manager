@@ -29,7 +29,7 @@ function display({datas, heading}={}){
 }
 
 
-class tabGroupControl {
+class tabGroupControler {
     isStoreWindow(window){
         const result = window.tabs.some(
             tab=> tab.url.endsWith("chrome-extensions/chrome-extension-1/flag.html" ));
@@ -69,17 +69,20 @@ class tabGroupControl {
         const window=await chrome.windows.getCurrent();
         this.moveTabsToWindow(window.id);
     }
+}
 
+class Buttons{
     constructor() {
+        this.controller=new tabGroupControler();
         this.enable_buttons();
     }
     
     enable_buttons(){
         document.querySelector('button#hide').addEventListener('click', async () => {
-            this.hide();
+            this.controller.hide();
         });
         document.querySelector('button#show').addEventListener('click', async () => {
-            this.show();
+            this.controller.show();
         });
     }
 }
@@ -94,4 +97,4 @@ display({datas:groups,heading:"Debug—Tab Groups"});
 const current_window= await chrome.windows.getCurrent();
 document.querySelector('#output').append(`current window id: ${current_window.id}`);
 
-new tabGroupControl();
+new Buttons();

@@ -15,5 +15,8 @@
         "https://www.wikipedia.org/*",
         "https://developer.chrome.com/*"
     ],
-  "permissions": ["tabGroups"]
+    "permissions": [
+        "tabGroups",
+        "tabs" // :hack: used to identify store window
+    ]
 }

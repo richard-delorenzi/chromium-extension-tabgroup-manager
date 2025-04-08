@@ -28,50 +28,52 @@ function display({datas, heading}={}){
     document.querySelector('#output').append(section);
 }
 
-function isStoreWindow(window){
-    const result = window.tabs.some(
-        tab=> tab.url.endsWith("chrome-extensions/chrome-extension-1/flag.html" ));
-    return result;
-}
 
-async function storeWindowId(){
-    const windows = await chrome.windows.getAll({populate:true});
-    const result = (
-        windows
-            .filter( window => isStoreWindow(window) )
-            .map(window => window.id)
-        [0] //assume only one
-    );
-    return result;
-}
-
-async function moveTabsToWindow(windowId){
-    const tabGroups= await chrome.tabGroups.query({});
-    tabGroups.filter( group => ["1","2"].includes(group.title) )
-        .forEach(
-            group => {
-                chrome.tabGroups.move(
-                    group.id,
-                    { index: -1, windowId}
-                );
-            }
-        );
-}
-
-class Buttons {
+class tabGroupControl {
     constructor() {
         this.enable_buttons();
     }
+
+    isStoreWindow(window){
+        const result = window.tabs.some(
+            tab=> tab.url.endsWith("chrome-extensions/chrome-extension-1/flag.html" ));
+        return result;
+    }
+    
+    async storeWindowId(){
+        const windows = await chrome.windows.getAll({populate:true});
+        const result = (
+            windows
+                .filter( window => this.isStoreWindow(window) )
+                .map(window => window.id)
+            [0] //assume only one
+        );
+        return result;
+    }
+
+    async moveTabsToWindow(windowId){
+        const tabGroups= await chrome.tabGroups.query({});
+        tabGroups.filter( group => ["1","2"].includes(group.title) )
+            .forEach(
+                group => {
+                    chrome.tabGroups.move(
+                        group.id,
+                        { index: -1, windowId}
+                    );
+                }
+            );
+    }
+    
     async hide(){
         document.querySelector('p#button-notes').textContent = "you clicked hide";
-        const windowId=await storeWindowId();
-        moveTabsToWindow(windowId);
+        const windowId=await this.storeWindowId();
+        this.moveTabsToWindow(windowId);
     }
     
     async show(){
         document.querySelector('p#button-notes').textContent = "you clicked show.";
         const window=await chrome.windows.getCurrent();
-        moveTabsToWindow(window.id);
+        this.moveTabsToWindow(window.id);
     }
     
     enable_buttons(){
@@ -94,4 +96,4 @@ display({datas:groups,heading:"Debug—Tab Groups"});
 const current_window= await chrome.windows.getCurrent();
 document.querySelector('#output').append(`current window id: ${current_window.id}`);
 
-new Buttons();
+new tabGroupControl();

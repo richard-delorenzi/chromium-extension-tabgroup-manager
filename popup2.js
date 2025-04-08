@@ -30,10 +30,6 @@ function display({datas, heading}={}){
 
 
 class tabGroupControl {
-    constructor() {
-        this.enable_buttons();
-    }
-
     isStoreWindow(window){
         const result = window.tabs.some(
             tab=> tab.url.endsWith("chrome-extensions/chrome-extension-1/flag.html" ));
@@ -65,15 +61,17 @@ class tabGroupControl {
     }
     
     async hide(){
-        document.querySelector('p#button-notes').textContent = "you clicked hide";
         const windowId=await this.storeWindowId();
         this.moveTabsToWindow(windowId);
     }
     
     async show(){
-        document.querySelector('p#button-notes').textContent = "you clicked show.";
         const window=await chrome.windows.getCurrent();
         this.moveTabsToWindow(window.id);
+    }
+
+    constructor() {
+        this.enable_buttons();
     }
     
     enable_buttons(){

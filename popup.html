@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
+    <section id="tab-groups">
+      <h1>Tab Groups</h1>
+      <ul>
+        <template id="item">
+          <li>
+            <input type="checkbox" id="1">
+            <label for="1" id="content"></label>
+          </li>
+        </template>
+      </ul>
+    </section>
+
+    <button id="hide">Hide</button>
+    <button id="show">Show</button>
+    <p id="button-notes">blank</p>
+
+    <!-- debug stuff -->
+    <div id="output"></div>
+    
     <template id="template">
       <h2 id="heading"></h2>
       <ul id="output-list"></ul>
@@ -17,12 +36,6 @@
         <p id="content"></p>
       </li>
     </template>
-
-    <button id="hide">Hide</button>
-    <button id="show">Show</button>
-    <p id="button-notes">blank</p>
-
-    <div id="output"></div>
    
 
     <script src="./popup.js" type="module"></script>

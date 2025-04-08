@@ -1,23 +1,28 @@
+"use strict";
+
 function PrettyJsonElementOf(obj){
     const result=document.createElement('pre');
     result.textContent=JSON.stringify(obj, null,2);
     return result;
 }
 
+function display_listitem(output, data){
+    const element = li_template.content.cloneNode(true);
+    element.querySelector('#title').textContent = data.title;
+    element.querySelector('#content').replaceWith(
+        PrettyJsonElementOf(data)
+    );
+    output.append(element);
+}
+
 function display({datas, heading}={}){
-    const template = document.getElementById('template');
-    const li_template = document.getElementById('li_template');
-    
+    const template = document.getElementById('template');  
     const section = template.content.cloneNode(true);
     section.querySelector('#heading').textContent = heading;
     const output_list=section.querySelector('ul#output-list');
+    
     for (const data of datas) {
-        const element = li_template.content.cloneNode(true);
-        element.querySelector('#title').textContent = data.title;
-        element.querySelector('#content').replaceWith(
-            PrettyJsonElementOf(data)
-        );
-        output_list.append(element);
+        display_listitem(output_list, data);
     }
     
     document.querySelector('#output').append(section);
@@ -80,8 +85,8 @@ class Buttons {
 }
 
 
-//const groups = await chrome.tabGroups.query({});
-//display({datas:groups,heading:"Tab Groups"});
+const groups = await chrome.tabGroups.query({});
+display({datas:groups,heading:"Tab Groups"});
 
 //const windows = await chrome.windows.getAll({populate:true});
 //display({datas:windows,heading:"Windows"});

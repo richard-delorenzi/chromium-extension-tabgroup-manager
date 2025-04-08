@@ -29,7 +29,7 @@ function display({datas, heading}={}){
 }
 
 
-class tabGroupControler {
+class tabGroupController {
     isStoreWindow(window){
         const result = window.tabs.some(
             tab=> tab.url.endsWith("chrome-extensions/chrome-extension-1/flag.html" ));
@@ -73,7 +73,7 @@ class tabGroupControler {
 
 class Buttons{
     constructor() {
-        this.controller=new tabGroupControler();
+        this.controller=new tabGroupController();
         this.enable_buttons();
     }
     

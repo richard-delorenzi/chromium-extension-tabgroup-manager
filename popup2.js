@@ -42,7 +42,7 @@ async function storeWindowId(){
 
 async function moveTabsToWindow(windowId){
     const tabGroups= await chrome.tabGroups.query({});
-    tabGroups.filter( group => group.title === "1" )
+    tabGroups.filter( group => ["1","2"].includes(group.title) )
         .forEach(
             group => {
                 chrome.tabGroups.move(

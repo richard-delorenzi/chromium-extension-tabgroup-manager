@@ -44,8 +44,19 @@ class Buttons {
     constructor() {
         this.enable_buttons();
     }
-    hide(){
+    async hide(){
         document.querySelector('p#button-notes').textContent = "you clicked hide";
+        const storeId=await storeWindowId();
+        const tabGroups= await chrome.tabGroups.query({});
+        tabGroups.filter( group => group.title === "1" )
+            .forEach(
+                group => {
+                    chrome.tabGroups.move(
+                        group.id,
+                        { index: -1, windowId:storeId}
+                    );
+                }
+            );
     }
     
     show(){
@@ -77,4 +88,3 @@ const current_window= await chrome.windows.getCurrent();
 document.querySelector('#output').append(`current window id: ${current_window.id}`);
 
 new Buttons();
-

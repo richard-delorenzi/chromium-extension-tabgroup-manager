@@ -64,12 +64,14 @@ class tabGroupController {
         return result;
     }
 
-
+    static async moveGroupsToWindow(windowId){
+        this.moveGroupsByNameToWindow(windowId,["1","2"]);
+    }
         
-    static async moveGroupsToWindow(windowId, ){
+    static async moveGroupsByNameToWindow(windowId, listOfNames ){
         const tabGroups= await chrome.tabGroups.query({});
         tabGroups
-            .filter( group => ["1","2"].includes(group.title) )
+            .filter( group => listOfNames.includes(group.title) )
             .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: as errors.
             .forEach(
                 group => {

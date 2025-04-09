@@ -30,21 +30,17 @@ function display({datas, heading}={}){
 
 
 class tabGroupController {
-    constructor(){
-    
-    }
-
-    async makeStoreWindow(){
+    static async makeStoreWindow(){
         await chrome.windows.create({state:"normal",url:"flag.html"});
     }
     
-    isStoreWindow(window){
+    static isStoreWindow(window){
         const result = window.tabs.some(
             tab=> tab.url.endsWith("chrome-extensions/chrome-extension-1/flag.html" ));
         return result;
     }
     
-    async storeWindowId(){
+    static async storeWindowId(){
         var result=false;
         const windows = await chrome.windows.getAll({populate:true});
         const list = (
@@ -58,7 +54,8 @@ class tabGroupController {
         return result;
     }
 
-    async moveTabsToWindow(windowId){
+    static async moveTabsToWindow(windowId){
+        debug(`windowId ${windowId}`);
         const tabGroups= await chrome.tabGroups.query({});
         tabGroups.filter( group => ["1","2"].includes(group.title) )
             .forEach(
@@ -71,12 +68,12 @@ class tabGroupController {
             );
     }
     
-    async hide(){
+    static async hide(){
         const windowId=await this.storeWindowId();
         this.moveTabsToWindow(windowId);
     }
     
-    async show(){
+    static async show(){
         const window=await chrome.windows.getCurrent();
         this.moveTabsToWindow(window.id);
     }
@@ -84,23 +81,28 @@ class tabGroupController {
 
 class Buttons{
     constructor() {
-        this.controller=new tabGroupController();
         this.enable_buttons();
     }
     
     enable_buttons(){
         document.querySelector('button#hide').addEventListener('click', async () => {
-            this.controller.hide();
+            tabGroupController.hide();
         });
         document.querySelector('button#show').addEventListener('click', async () => {
-            this.controller.show();
+            tabGroupController.show();
         });
     }
 }
 
 
-const groups = await chrome.tabGroups.query({});
-display({datas:groups,heading:"Debug—Tab Groups"});
+function debug(msg){
+    const out=document.createElement('p');
+    out.textContent=msg;
+    document.querySelector('#output').append(out);
+}
+
+//const groups = await chrome.tabGroups.query({});
+//display({datas:groups,heading:"Debug—Tab Groups"});
 
 //const windows = await chrome.windows.getAll({populate:true});
 //display({datas:windows,heading:"Windows"});
@@ -109,5 +111,7 @@ display({datas:groups,heading:"Debug—Tab Groups"});
 //document.querySelector('#output').append(`current window id: ${current_window.id}`);
 
 const buttons=new Buttons();
-const id = await buttons.controller.storeWindowId();
-document.querySelector('#output').append(id);
+const store_id = await tabGroupController.storeWindowId();
+debug(`store window: ${store_id}`);
+const current_window_id= (await chrome.windows.getCurrent()).id;
+debug(`store window: ${current_window_id}`);

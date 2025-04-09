@@ -29,24 +29,21 @@ function display({datas, heading}={}){
 }
 
 class tabGroupController {
-    static {
-        // :error: calling async function
-        this.ensureStoreWindowExists();
+
+    static async #createStoreWindow(){
+        await chrome.windows.create({state:"minimized",url:"flag.html"});
     }
-    
-    static async ensureStoreWindowExists(){
-        if (await this.storeWindowId()===null) {
-            await chrome.windows.create({state:"minimized",url:"flag.html"});
+
+    static async storeWindowId(){
+        var result=await this.#storeWindowId();
+        if (result === null) {
+            await this.#createStoreWindow();
+            result=await this.#storeWindowId();
         }
-    }
-    
-    static isStoreWindow(window){
-        const result = window.tabs.some(
-            tab=> tab.url.endsWith("flag.html" ));
         return result;
     }
     
-    static async storeWindowId(){
+    static async #storeWindowId(){
         var result=null;
         const windows = await chrome.windows.getAll({populate:true});
         const list = (
@@ -56,7 +53,13 @@ class tabGroupController {
         );
         if (list.length === 1){
             result=list[0]; //:kluge:assume only one
-        }
+        }  
+        return result;
+    }
+
+    static isStoreWindow(window){
+        const result = window.tabs.some(
+            tab=> tab.url.endsWith("flag.html" ));
         return result;
     }
 

@@ -37,6 +37,7 @@ class tabGroupController {
     static async storeWindowId(){
         var result=await this.#storeWindowId();
         if (result === null) {
+            //fix and retry
             await this.#createStoreWindow();
             result=await this.#storeWindowId();
         }
@@ -63,7 +64,9 @@ class tabGroupController {
         return result;
     }
 
-    static async moveTabsToWindow(windowId){
+
+        
+    static async moveGroupsToWindow(windowId, ){
         const tabGroups= await chrome.tabGroups.query({});
         tabGroups
             .filter( group => ["1","2"].includes(group.title) )
@@ -80,12 +83,12 @@ class tabGroupController {
     
     static async hide(){
         const windowId=await this.storeWindowId();
-        this.moveTabsToWindow(windowId);
+        this.moveGroupsToWindow(windowId);
     }
     
     static async show(){
         const window=await chrome.windows.getCurrent();
-        this.moveTabsToWindow(window.id);
+        this.moveGroupsToWindow(window.id);
     }
 }
 

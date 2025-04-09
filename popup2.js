@@ -28,6 +28,11 @@ function display({datas, heading}={}){
     document.querySelector('#output').append(section);
 }
 
+class EveryThing{
+    includes(x){
+        return true;
+    }
+}
 class tabGroupController {
 
     static async #createStoreWindow(){
@@ -85,12 +90,12 @@ class tabGroupController {
     
     static async hide(){
         const windowId=await this.storeWindowId();
-        this.moveGroupsToWindow(windowId);
+        this.moveGroupsByNameToWindow(windowId,new EveryThing());
     }
     
     static async show(){
-        const window=await chrome.windows.getCurrent();
-        this.moveGroupsToWindow(window.id);
+        const windowId=(await chrome.windows.getCurrent()).id;
+        this.moveGroupsByNameToWindow(windowId,new EveryThing());
     }
 }
 

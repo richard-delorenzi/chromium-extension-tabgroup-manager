@@ -30,6 +30,7 @@ function display({datas, heading}={}){
 
 class tabGroupController {
     static {
+        // :error: calling async function
         this.ensureStoreWindowExists();
     }
     

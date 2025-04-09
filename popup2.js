@@ -49,15 +49,16 @@ class tabGroupController {
                 .map(window => window.id)
         );
         if (list.length === 1){
-            result=list[0]; //assume only one
+            result=list[0]; //:kluge:assume only one
         }
         return result;
     }
 
     static async moveTabsToWindow(windowId){
-        debug(`windowId ${windowId}`);
         const tabGroups= await chrome.tabGroups.query({});
-        tabGroups.filter( group => ["1","2"].includes(group.title) )
+        tabGroups
+            .filter( group => ["1","2"].includes(group.title) )
+            .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: as errors.
             .forEach(
                 group => {
                     chrome.tabGroups.move(
@@ -101,8 +102,8 @@ function debug(msg){
     document.querySelector('#output').append(out);
 }
 
-//const groups = await chrome.tabGroups.query({});
-//display({datas:groups,heading:"Debug—Tab Groups"});
+const groups = await chrome.tabGroups.query({});
+display({datas:groups,heading:"Debug—Tab Groups"});
 
 //const windows = await chrome.windows.getAll({populate:true});
 //display({datas:windows,heading:"Windows"});

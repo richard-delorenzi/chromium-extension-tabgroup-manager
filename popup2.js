@@ -28,20 +28,25 @@ function display({datas, heading}={}){
     document.querySelector('#output').append(section);
 }
 
-
 class tabGroupController {
-    static async makeStoreWindow(){
-        await chrome.windows.create({state:"normal",url:"flag.html"});
+    static {
+        this.ensureStoreWindowExists();
+    }
+    
+    static async ensureStoreWindowExists(){
+        if (await this.storeWindowId()===null) {
+            await chrome.windows.create({state:"minimized",url:"flag.html"});
+        }
     }
     
     static isStoreWindow(window){
         const result = window.tabs.some(
-            tab=> tab.url.endsWith("chrome-extensions/chrome-extension-1/flag.html" ));
+            tab=> tab.url.endsWith("flag.html" ));
         return result;
     }
     
     static async storeWindowId(){
-        var result=false;
+        var result=null;
         const windows = await chrome.windows.getAll({populate:true});
         const list = (
             windows
@@ -102,8 +107,8 @@ function debug(msg){
     document.querySelector('#output').append(out);
 }
 
-const groups = await chrome.tabGroups.query({});
-display({datas:groups,heading:"Debug—Tab Groups"});
+//const groups = await chrome.tabGroups.query({});
+//display({datas:groups,heading:"Debug—Tab Groups"});
 
 //const windows = await chrome.windows.getAll({populate:true});
 //display({datas:windows,heading:"Windows"});
@@ -115,4 +120,4 @@ const buttons=new Buttons();
 const store_id = await tabGroupController.storeWindowId();
 debug(`store window: ${store_id}`);
 const current_window_id= (await chrome.windows.getCurrent()).id;
-debug(`store window: ${current_window_id}`);
+debug(`current window: ${current_window_id}`);

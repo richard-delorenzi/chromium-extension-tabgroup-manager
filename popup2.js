@@ -1,5 +1,13 @@
 "use strict";
 
+class Time {
+    static day(){
+        const locale = navigator.language;
+        const today = new Date();
+        const options = { weekday: "short" };
+        return new Intl.DateTimeFormat(locale, options).format(today);
+    }
+}
 
 function PrettyJsonElementOf(obj){
     const result=document.createElement('pre');

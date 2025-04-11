@@ -134,7 +134,6 @@ class Buttons{
     }
 }
 
-
 function debug(msg){
     const out=document.createElement('p');
     out.textContent=msg;
@@ -156,4 +155,4 @@ debug(`store window: ${store_id}`);
 const current_window_id= (await chrome.windows.getCurrent()).id;
 debug(`current window: ${current_window_id}`);
 
-//debug(`day: ${Time.day()}`);
+debug(`day: ${Time.day()}`);

@@ -16,6 +16,7 @@
         "https://developer.chrome.com/*"
     ],
     "permissions": [
+        "storage",
         "tabGroups",
         "tabs" // :hack: used to identify store window
     ]

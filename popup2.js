@@ -1,5 +1,6 @@
 "use strict";
 
+
 function PrettyJsonElementOf(obj){
     const result=document.createElement('pre');
     result.textContent=JSON.stringify(obj, null,2);
@@ -33,6 +34,7 @@ class EveryThing{
         return true;
     }
 }
+
 class tabGroupController {
 
     static async #createStoreWindow(){
@@ -88,14 +90,14 @@ class tabGroupController {
             );
     }
     
-    static async hide(){
+    static async hide(list=new EveryThing()){
         const windowId=await this.storeWindowId();
-        this.moveGroupsByNameToWindow(windowId,new EveryThing());
+        this.moveGroupsByNameToWindow(windowId,list);
     }
     
-    static async show(){
+    static async show(list=new EveryThing()){
         const windowId=(await chrome.windows.getCurrent()).id;
-        this.moveGroupsByNameToWindow(windowId,new EveryThing());
+        this.moveGroupsByNameToWindow(windowId,list);
     }
 }
 
@@ -105,11 +107,21 @@ class Buttons{
     }
     
     enable_buttons(){
-        document.querySelector('button#hide').addEventListener('click', async () => {
+        document.querySelector('button#hide-all').addEventListener('click', async () => {
             tabGroupController.hide();
         });
-        document.querySelector('button#show').addEventListener('click', async () => {
+        document.querySelector('button#show-all').addEventListener('click', async () => {
             tabGroupController.show();
+        });
+        document.querySelector('button#show-n').addEventListener('click', async () => {
+            tabGroupController.show(["1","2"]);
+        });
+        document.querySelector('button#hide-n').addEventListener('click', async () => {
+            tabGroupController.hide(["1","2"]);
+        });
+        document.querySelector('button#only-n').addEventListener('click', async () => {
+            await tabGroupController.hide();
+            tabGroupController.show(["1","2"]);
         });
     }
 }
@@ -135,3 +147,5 @@ const store_id = await tabGroupController.storeWindowId();
 debug(`store window: ${store_id}`);
 const current_window_id= (await chrome.windows.getCurrent()).id;
 debug(`current window: ${current_window_id}`);
+
+//debug(`day: ${Time.day()}`);

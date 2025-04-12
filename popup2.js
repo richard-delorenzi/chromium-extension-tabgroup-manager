@@ -43,10 +43,11 @@ class Time {
     }
 
     set weekParity(v){
+        v=parseInt(v);
         if (v === 0 || v === 1){
             this.#weekParity=v;
         }else{
-            throw new TypeError("must be 0 or 1");
+            throw new TypeError(`must be 0 or 1. got ${v}`);
         }
     }
 
@@ -176,16 +177,41 @@ class Buttons{
 }
 
 class Store{
+    get store(){ return chrome.storage.sync;}
     save(){
-        chrome.storage.sync.set({"test":"7"}).then( x => {} );
+        debug("hello");
+        const parity=Factory.the.time.weekParity;
+        debug(parity);
+        Promise.all([
+            this.store.set({"time_weekParity": parity}),
+          
+        ]).then( values => {
+        }).catch(error => {
+            
+        });      
+    }
+    async load({time}={}){
+        const data= await this.store.get();
+        display({datas:[data],heading:"load data"});
+
+        if (data && data.time_weekParity ){ 
+            time.weekParity= data.time_weekParity;
+        }
+
     }
 }
 
 class Factory{
+    static the = new Factory();
+    store = new Store();
     time = new Time();
+
+    constructor (){
+        this.store.load({time:this.time})
+    }
 }
 
-const factory=new Factory();
+const factory=Factory.the;
 
 function debug(msg){
     const out=document.createElement('p');
@@ -215,4 +241,6 @@ time.toggleWeekParity();
 debug(`week type: ${time.weekType()}`);
 time.toggleWeekParity();
 debug(`week type: ${time.weekType()}`);
-new Store().save();
+time.toggleWeekParity();
+
+Factory.the.store.save();

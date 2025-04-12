@@ -1,55 +1,5 @@
 "use strict";
 
-class Time {
-    static day(){
-        const locale = navigator.language;
-        const today = new Date();
-        const options = { weekday: "short" };
-        return new Intl.DateTimeFormat(locale, options).format(today);
-    }
-
-    static #weekParity = 0;
-
-    static get weekParity(){
-        return this.#weekParity;
-    }
-
-    static set weekParity(v){
-        if (v === 0 || v === 1){
-            this.#weekParity=v;
-        }else{
-            throw new TypeError("must be 0 or 1");
-        }
-    }
-
-    static toggleWeekParity(){
-        if (this.#weekParity ===0){ this.#weekParity=1;}
-        else{ this.#weekParity=0;}
-    }
-
-    static weekType(){
-        //return A or B
-        return (this.#weeksSinceSeptember1()%2 == this.#weekParity) ? "A" : "B"; 
-    }
-
-    static #weeksSinceSeptember1() {
-        const current = new Date();
-        const milliSecondsSince=current - this.#lastSeptember();
-        const result = Math.floor(milliSecondsSince /1000 /60 /60 /24 /7);
-        return result;
-    }
-
-    static #lastSeptember(){
-        const currentYear = new Date().getFullYear();
-        const today = new Date();
-        let septemberFirst = new Date(currentYear, 8, 1);
-        if (today < septemberFirst) {
-            septemberFirst.setFullYear(septemberFirst.getFullYear() -1 )
-        }
-        return septemberFirst;
-    }
-}
-
 function PrettyJsonElementOf(obj){
     const result=document.createElement('pre');
     result.textContent=JSON.stringify(obj, null,2);
@@ -76,6 +26,56 @@ function display({datas, heading}={}){
     }
     
     document.querySelector('#output').append(section);
+}
+
+class Time {
+    static day(){
+        const locale = navigator.language;
+        const today = new Date();
+        const options = { weekday: "short" };
+        return new Intl.DateTimeFormat(locale, options).format(today);
+    }
+
+    #weekParity = 0;
+
+    get weekParity(){
+        return this.#weekParity;
+    }
+
+    set weekParity(v){
+        if (v === 0 || v === 1){
+            this.#weekParity=v;
+        }else{
+            throw new TypeError("must be 0 or 1");
+        }
+    }
+
+    toggleWeekParity(){
+        if (this.#weekParity ===0){ this.#weekParity=1;}
+        else{ this.#weekParity=0;}
+    }
+
+    weekType(){
+        //return A or B
+        return (this.#weeksSinceSeptember1()%2 == this.#weekParity) ? "A" : "B"; 
+    }
+
+    #weeksSinceSeptember1() {
+        const current = new Date();
+        const milliSecondsSince=current - this.#lastSeptember();
+        const result = Math.floor(milliSecondsSince /1000 /60 /60 /24 /7);
+        return result;
+    }
+
+    #lastSeptember(){
+        const currentYear = new Date().getFullYear();
+        const today = new Date();
+        let septemberFirst = new Date(currentYear, 8, 1);
+        if (today < septemberFirst) {
+            septemberFirst.setFullYear(septemberFirst.getFullYear() -1 )
+        }
+        return septemberFirst;
+    }
 }
 
 class EveryThing{
@@ -175,6 +175,18 @@ class Buttons{
     }
 }
 
+class Store{
+    save(){
+        chrome.storage.sync.set({"test":"7"}).then( x => {} );
+    }
+}
+
+class Factory{
+    time = new Time();
+}
+
+const factory=new Factory();
+
 function debug(msg){
     const out=document.createElement('p');
     out.textContent=msg;
@@ -197,8 +209,10 @@ const current_window_id= (await chrome.windows.getCurrent()).id;
 debug(`current window: ${current_window_id}`);
 
 debug(`day: ${Time.day()}`);
-debug(`week type: ${Time.weekType()}`);
-Time.toggleWeekParity();
-debug(`week type: ${Time.weekType()}`);
-Time.toggleWeekParity();
-debug(`week type: ${Time.weekType()}`);
+const time=factory.time;
+debug(`week type: ${time.weekType()}`);
+time.toggleWeekParity();
+debug(`week type: ${time.weekType()}`);
+time.toggleWeekParity();
+debug(`week type: ${time.weekType()}`);
+new Store().save();

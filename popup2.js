@@ -184,20 +184,20 @@ class Store{
         debug(parity);
         Promise.all([
             this.store.set({"time_weekParity": parity}),
-          
+            this.store.set({
+                "g:all 7":["7x3","7x4","7y3", "7y4"],
+                "g:all 8":["8x3","8x4","8y3", "8y4"],
+            })
         ]).then( values => {
-        }).catch(error => {
-            
+        }).catch(error => {          
         });      
     }
     async load({time}={}){
         const data= await this.store.get();
         display({datas:[data],heading:"load data"});
-
-        if (data && data.time_weekParity ){ 
+        if (data){
             time.weekParity= data.time_weekParity;
         }
-
     }
 }
 
@@ -237,10 +237,6 @@ debug(`current window: ${current_window_id}`);
 debug(`day: ${Time.day()}`);
 const time=factory.time;
 debug(`week type: ${time.weekType()}`);
-time.toggleWeekParity();
-debug(`week type: ${time.weekType()}`);
-time.toggleWeekParity();
-debug(`week type: ${time.weekType()}`);
-time.toggleWeekParity();
+
 
 Factory.the.store.save();

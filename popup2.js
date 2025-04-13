@@ -152,27 +152,37 @@ class tabGroupController {
 }
 
 class Buttons{
-    constructor() {
+    constructor(store) {
+        this.store=store;
         this.enable_buttons();
     }
     
     enable_buttons(){
-        document.querySelector('button#hide-all').addEventListener('click', async () => {
-            tabGroupController.hide();
+        debug("here");
+        const store=this.store.store;
+        store.getKeys().then( keys => {
+            debug(JSON.stringify(keys));
+            const g_keys=keys.filter( key => key.startsWith("g:") );
+            debug(JSON.stringify(g_keys));
+            g_keys.forEach(
+                key => {
+                  
+                }
+            );
         });
-        document.querySelector('button#show-all').addEventListener('click', async () => {
-            tabGroupController.show();
-        });
-        document.querySelector('button#show-n').addEventListener('click', async () => {
-            tabGroupController.show(["1","2"]);
-        });
-        document.querySelector('button#hide-n').addEventListener('click', async () => {
-            tabGroupController.hide(["1","2"]);
-        });
-        document.querySelector('button#only-n').addEventListener('click', async () => {
-            await tabGroupController.hide();
-            tabGroupController.show(["1","2"]);
-        });
+        debug("here");
+
+
+
+        
+        // const output=document.querySelector('#tab-group-selector ul')
+        //const item=document.createElement('p');result.textContent="hello";
+        //output.append(item);
+        
+        //document.querySelector('button#hide-all').addEventListener('click', async () => {
+        //    tabGroupController.hide();
+        //});
+        
     }
 }
 
@@ -193,7 +203,8 @@ class Store{
         });      
     }
     async load({time}={}){
-        const data= await this.store.get();
+        this.data= await this.store.get();
+        const data=this.data;
         display({datas:[data],heading:"load data"});
         if (data){
             time.weekParity= data.time_weekParity;
@@ -203,15 +214,14 @@ class Store{
 
 class Factory{
     static the = new Factory();
-    store = new Store();
-    time = new Time();
 
     constructor (){
-        this.store.load({time:this.time})
+        this.store = new Store();
+        this.time = new Time();
+        this.store.load({time:this.time});
+        this.buttons=new Buttons(this.store);
     }
 }
-
-const factory=Factory.the;
 
 function debug(msg){
     const out=document.createElement('p');
@@ -219,24 +229,7 @@ function debug(msg){
     document.querySelector('#output').append(out);
 }
 
-//const groups = await chrome.tabGroups.query({});
-//display({datas:groups,heading:"Debug—Tab Groups"});
-
-//const windows = await chrome.windows.getAll({populate:true});
-//display({datas:windows,heading:"Windows"});
-
-//const current_window= await chrome.windows.getCurrent();
-//document.querySelector('#output').append(`current window id: ${current_window.id}`);
-
-const buttons=new Buttons();
-const store_id = await tabGroupController.storeWindowId();
-debug(`store window: ${store_id}`);
-const current_window_id= (await chrome.windows.getCurrent()).id;
-debug(`current window: ${current_window_id}`);
-
-debug(`day: ${Time.day()}`);
-const time=factory.time;
-debug(`week type: ${time.weekType()}`);
+const factory=Factory.the;
 
 
-Factory.the.store.save();
+//Factory.the.store.save();

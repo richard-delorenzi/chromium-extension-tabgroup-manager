@@ -210,12 +210,6 @@ class Buttons extends Observer{
             
             output.append(buttons);
         });
-      
-        
-        //document.querySelector('button#hide-all').addEventListener('click', async () => {
-        //    tabGroupController.hide();
-        //});
-        
     }
 }
 

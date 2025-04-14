@@ -1,5 +1,21 @@
 "use strict";
 
+class Observer{
+    update(){
+    }
+}
+class ObservedSubject{
+    observers=[];
+    register(observer){
+        this.observers.push(observer);
+    }
+    _notify(){
+        this.observers.forEach( observer => {
+            observer.update();
+        });
+    }
+}
+
 function PrettyJsonElementOf(obj){
     const result=document.createElement('pre');
     result.textContent=JSON.stringify(obj, null,2);
@@ -161,16 +177,16 @@ class Buttons{
         debug("here");
         const store=this.store.store;
         store.getKeys().then( keys => {
-            debug(JSON.stringify(keys));
+            //debug(JSON.stringify(keys));
             const g_keys=keys.filter( key => key.startsWith("g:") );
-            debug(JSON.stringify(g_keys));
+            //debug(JSON.stringify(g_keys));
             g_keys.forEach(
                 key => {
                   
                 }
             );
         });
-        debug("here");
+      
 
 
 
@@ -186,7 +202,8 @@ class Buttons{
     }
 }
 
-class Store{
+class Store extends ObservedSubject{
+    data={};
     get store(){ return chrome.storage.sync;}
     save(){
         debug("hello");
@@ -202,13 +219,24 @@ class Store{
         }).catch(error => {          
         });      
     }
-    async load({time}={}){
-        this.data= await this.store.get();
-        const data=this.data;
-        display({datas:[data],heading:"load data"});
-        if (data){
-            time.weekParity= data.time_weekParity;
-        }
+    load(){
+        this.store.get().then( data => {
+            this.data=data;
+            if (data){
+                this._notify();
+            }
+        }).catch(error =>{
+        });
+    }
+}
+
+class SimpleStoreObserver extends Observer {
+    constructor(store){
+        super();
+        this.store=store;
+    }
+    update(){
+        debug_element(PrettyJsonElementOf(this.store.data));
     }
 }
 
@@ -217,9 +245,12 @@ class Factory{
 
     constructor (){
         this.store = new Store();
+        this.store_observer=new SimpleStoreObserver(this.store);
         this.time = new Time();
-        this.store.load({time:this.time});
         this.buttons=new Buttons(this.store);
+
+        this.store.register(this.store_observer);
+        this.store.load();
     }
 }
 
@@ -227,6 +258,10 @@ function debug(msg){
     const out=document.createElement('p');
     out.textContent=msg;
     document.querySelector('#output').append(out);
+}
+
+function debug_element(element){
+    document.querySelector('#output').append(element);
 }
 
 const factory=Factory.the;

@@ -44,7 +44,15 @@ function display({datas, heading}={}){
     document.querySelector('#output').append(section);
 }
 
-class Time {
+class Time extends Observer{
+    constructor(store){
+        super();
+        this.store=store;
+    }
+    update(){
+        this.#weekParity = this.store.data.time_weekParity;
+    }
+    
     static day(){
         const locale = navigator.language;
         const today = new Date();
@@ -167,30 +175,35 @@ class tabGroupController {
     }
 }
 
-class Buttons{
+class Buttons extends Observer{
     constructor(store) {
+        super();
         this.store=store;
-        this.enable_buttons();
+    }
+    update(){
+        this.enable_buttons();   
     }
     
     enable_buttons(){
-        debug("here");
-        const store=this.store.store;
-        store.getKeys().then( keys => {
-            //debug(JSON.stringify(keys));
-            const g_keys=keys.filter( key => key.startsWith("g:") );
-            //debug(JSON.stringify(g_keys));
-            g_keys.forEach(
-                key => {
-                  
-                }
-            );
+        const output= document.querySelector('#tab-group-selector ul');
+        const buttons_template=document.querySelector('#tab-group-selector ul #item');
+        const data=this.store.data;
+        const keys= Object.keys(data)
+              .filter(key => key.startsWith("g:"))
+        ;
+        debug_heading("buttons");
+        debug(JSON.stringify(keys));
+        keys.forEach( key => {
+            const name=key.substring(2);
+            const value=data[key];
+
+            const buttons=buttons_template.content.cloneNode(true);
+            buttons.querySelector("#name").textContent=name;
+            buttons.querySelector("li").id=name;
+            output.append(buttons);
         });
       
-
-
-
-        
+           
         // const output=document.querySelector('#tab-group-selector ul')
         //const item=document.createElement('p');result.textContent="hello";
         //output.append(item);
@@ -236,6 +249,7 @@ class SimpleStoreObserver extends Observer {
         this.store=store;
     }
     update(){
+        debug_heading("simple store observer")
         debug_element(PrettyJsonElementOf(this.store.data));
     }
 }
@@ -246,10 +260,12 @@ class Factory{
     constructor (){
         this.store = new Store();
         this.store_observer=new SimpleStoreObserver(this.store);
-        this.time = new Time();
+        this.time = new Time(this.store);
         this.buttons=new Buttons(this.store);
 
         this.store.register(this.store_observer);
+        this.store.register(this.time);
+        this.store.register(this.buttons);
         this.store.load();
     }
 }
@@ -259,7 +275,11 @@ function debug(msg){
     out.textContent=msg;
     document.querySelector('#output').append(out);
 }
-
+function debug_heading(msg){
+    const out=document.createElement('h2');
+    out.textContent=msg;
+    document.querySelector('#output').append(out);
+}
 function debug_element(element){
     document.querySelector('#output').append(element);
 }

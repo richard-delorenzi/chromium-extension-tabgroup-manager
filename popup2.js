@@ -4,6 +4,7 @@ class Observer{
     update(){
     }
 }
+
 class ObservedSubject{
     observers=[];
     register(observer){
@@ -281,8 +282,5 @@ function debug_heading(msg){
 function debug_element(element){
     document.querySelector('#output').append(element);
 }
-
-const factory=Factory.the;
-
 
 //Factory.the.store.save();

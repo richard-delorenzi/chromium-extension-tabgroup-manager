@@ -196,17 +196,21 @@ class Buttons extends Observer{
         keys.forEach( key => {
             const name=key.substring(2);
             const value=data[key];
+            debug(JSON.stringify([key,value]));
 
             const buttons=buttons_template.content.cloneNode(true);
             buttons.querySelector("#name").textContent=name;
             buttons.querySelector("li").id=name;
+            buttons.querySelector("button#hide").addEventListener('click', async () => {
+                tabGroupController.hide(value);
+            });
+            buttons.querySelector("button#show").addEventListener('click', async () => {
+                tabGroupController.show(value);
+            });
+            
             output.append(buttons);
         });
       
-           
-        // const output=document.querySelector('#tab-group-selector ul')
-        //const item=document.createElement('p');result.textContent="hello";
-        //output.append(item);
         
         //document.querySelector('button#hide-all').addEventListener('click', async () => {
         //    tabGroupController.hide();

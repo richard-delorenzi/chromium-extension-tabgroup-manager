@@ -194,12 +194,12 @@ class tabGroupController {
     
     static async hide(obj=new EveryThing()){
         const windowId=await StoreWindow.Id();
-        moveGroupsToWindow(windowId, obj );
+        this.moveGroupsToWindow(windowId, obj );
     }
     
     static async show(obj=new EveryThing()){
         const windowId=(await chrome.windows.getCurrent()).id;
-        moveGroupsToWindow(windowId, obj );
+        this.moveGroupsToWindow(windowId, obj );
     }
 }
 

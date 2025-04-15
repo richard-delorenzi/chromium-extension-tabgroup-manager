@@ -184,14 +184,22 @@ class tabGroupController {
         this.#moveGroupsToWindowByStrategy(windowId, this.#startsWith, obj );
     }
     
-    static async hide(list=new EveryThing()){
+    static async hide(obj=new EveryThing()){
         const windowId=await StoreWindow.Id();
-        this.moveGroupsToWindowByStartsWith(windowId,list);
+        if (Array.isArray(obj)){
+            this.moveGroupsToWindowByName(windowId,obj);
+        }else{
+            this.moveGroupsToWindowByStartsWith(windowId,obj);
+        }
     }
     
-    static async show(list=new EveryThing()){
+    static async show(obj=new EveryThing()){
         const windowId=(await chrome.windows.getCurrent()).id;
-        this.moveGroupsToWindowByStartsWith(windowId,list);
+        if (Array.isArray(obj)){
+            this.moveGroupsToWindowByName(windowId,obj);
+        }else{
+            this.moveGroupsToWindowByStartsWith(windowId,obj);
+        }
     }
 }
 
@@ -211,12 +219,12 @@ class Buttons extends Observer{
         const keys= Object.keys(data)
               .filter(key => key.startsWith("g:"))
         ;
-        debug_heading("buttons");
-        debug(JSON.stringify(keys));
+        //debug_heading("buttons");
+        //debug(JSON.stringify(keys));
         keys.forEach( key => {
             const name=key.substring(2);
             const value=data[key];
-            debug(JSON.stringify([key,value]));
+            //debug(JSON.stringify([key,value]));
 
             const buttons=buttons_template.content.cloneNode(true);
             buttons.querySelector("#name").textContent=name;
@@ -278,7 +286,7 @@ class Factory{
 
     constructor (){
         this.store = new Store();
-        //this.store_observer=new SimpleStoreObserver(this.store);
+        this.store_observer=new SimpleStoreObserver(this.store);
         this.time = new Time(this.store);
         this.buttons=new Buttons(this.store);
 

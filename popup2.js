@@ -149,12 +149,20 @@ class StoreWindow {
 
 class tabGroupController {
 
-        
-    static async moveGroupsToWindowByName(windowId, listOfNames ){
+    static #listIncludes(list,item){
+        return list.includes(item);
+    }
+
+    static #startsWith(obj,item){
+        const start=obj.sw;
+        return item.startsWith(start);
+    }
+    
+    static async #moveGroupsToWindowByStrategy(windowId, strategy, obj ){
         const tabGroups= await chrome.tabGroups.query({});
         tabGroups
-            .filter( group => listOfNames.includes(group.title) ) // strategy
-            .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: as errors.
+            .filter( group => strategy(obj,group.title) )
+            .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: or else api will error.
             .forEach(
                 group => {
                     chrome.tabGroups.move(
@@ -162,17 +170,26 @@ class tabGroupController {
                         { index: -1, windowId}
                     );
                 }
-            );
+            )
+        ;
+    }
+
+    static async moveGroupsToWindowByName(windowId, listOfNames ){
+        this.#moveGroupsToWindowByStrategy(windowId, this.#listIncludes, listOfNames );
+    }
+
+    static async moveGroupsToWindowByStartsWith(windowId, obj ){
+        this.#moveGroupsToWindowByStrategy(windowId, this.#startsWith, obj );
     }
     
     static async hide(list=new EveryThing()){
         const windowId=await StoreWindow.Id();
-        this.moveGroupsToWindowByName(windowId,list);
+        this.moveGroupsToWindowByStartsWith(windowId,list);
     }
     
     static async show(list=new EveryThing()){
         const windowId=(await chrome.windows.getCurrent()).id;
-        this.moveGroupsToWindowByName(windowId,list);
+        this.moveGroupsToWindowByStartsWith(windowId,list);
     }
 }
 

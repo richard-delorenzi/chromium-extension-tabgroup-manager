@@ -183,9 +183,8 @@ class tabGroupController {
     static async moveGroupsToWindowByStartsWith(windowId, obj ){
         this.#moveGroupsToWindowByStrategy(windowId, this.#startsWith, obj );
     }
-    
-    static async hide(obj=new EveryThing()){
-        const windowId=await StoreWindow.Id();
+
+    static async moveGroupsToWindow(windowId, obj ){
         if (Array.isArray(obj)){
             this.moveGroupsToWindowByName(windowId,obj);
         }else{
@@ -193,13 +192,14 @@ class tabGroupController {
         }
     }
     
+    static async hide(obj=new EveryThing()){
+        const windowId=await StoreWindow.Id();
+        moveGroupsToWindow(windowId, obj );
+    }
+    
     static async show(obj=new EveryThing()){
         const windowId=(await chrome.windows.getCurrent()).id;
-        if (Array.isArray(obj)){
-            this.moveGroupsToWindowByName(windowId,obj);
-        }else{
-            this.moveGroupsToWindowByStartsWith(windowId,obj);
-        }
+        moveGroupsToWindow(windowId, obj );
     }
 }
 

@@ -151,13 +151,13 @@ class StoreWindow {
 
 class tabGroupController {
 
-    static #listIncludes(list,item){
-        return list.includes(item);
+    static #listIncludes(list,group_title){
+        return list.includes(group_title);
     }
 
-    static #startsWith(obj,item){
+    static #startsWith(obj,group_title){
         const start=obj.sw;
-        return item.startsWith(start);
+        return group_title.startsWith(start);
     }
     
     static async #moveGroupsToWindowByStrategy(windowId, strategy, obj ){

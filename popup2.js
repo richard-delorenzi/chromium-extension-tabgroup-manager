@@ -145,10 +145,6 @@ class tabGroupController {
             tab=> tab.url.endsWith("flag.html" ));
         return result;
     }
-
-    static async moveGroupsToWindow(windowId){
-        this.moveGroupsByNameToWindow(windowId,["1","2"]);
-    }
         
     static async moveGroupsByNameToWindow(windowId, listOfNames ){
         const tabGroups= await chrome.tabGroups.query({});

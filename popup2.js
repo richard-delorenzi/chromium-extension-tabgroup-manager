@@ -278,7 +278,7 @@ class Factory{
 
     constructor (){
         this.store = new Store();
-        this.store_observer=new SimpleStoreObserver(this.store);
+        //this.store_observer=new SimpleStoreObserver(this.store);
         this.time = new Time(this.store);
         this.buttons=new Buttons(this.store);
 

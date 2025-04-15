@@ -155,7 +155,7 @@ class tabGroupController {
         const is_directMatch= list.includes(group_title);
         const is_indirectMatch = list
             .filter( item => !(typeof item === "string") )
-            .some( item => tabGroupController.#startsWith(item, group_title) )
+              .some( item => this.#startsWith(item, group_title) )
         ;
         return is_directMatch || is_indirectMatch;
     }
@@ -182,11 +182,11 @@ class tabGroupController {
     }
 
     static async moveGroupsToWindowByName(windowId, listOfNames ){
-        this.#moveGroupsToWindowByStrategy(windowId, this.#listIncludes, listOfNames );
+        this.#moveGroupsToWindowByStrategy(windowId, this.#listIncludes.bind(this), listOfNames );
     }
 
     static async moveGroupsToWindowByStartsWith(windowId, obj ){
-        this.#moveGroupsToWindowByStrategy(windowId, this.#startsWith, obj );
+        this.#moveGroupsToWindowByStrategy(windowId, this.#startsWith.bind(this), obj );
     }
 
     static async moveGroupsToWindow(windowId, obj ){

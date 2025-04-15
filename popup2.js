@@ -110,28 +110,28 @@ class EveryThing{
     }
 }
 
-class tabGroupController {
 
-    static async #createStoreWindow(){
+class StoreWindow {
+    static async #create(){
         await chrome.windows.create({state:"minimized",url:"flag.html"});
     }
 
-    static async storeWindowId(){
-        let result=await this.#storeWindowId();
+    static async Id(){
+        let result=await this.#Id();
         if (result === null) {
             //fix and retry
-            await this.#createStoreWindow();
-            result=await this.#storeWindowId();
+            await this.#create();
+            result=await this.#Id();
         }
         return result;
     }
     
-    static async #storeWindowId(){
+    static async #Id(){
         let result=null;
         const windows = await chrome.windows.getAll({populate:true});
         const list = (
             windows
-                .filter( window => this.isStoreWindow(window) )
+                .filter( window => this.#isStoreWindow(window) )
                 .map(window => window.id)
         );
         if (list.length === 1){
@@ -140,11 +140,14 @@ class tabGroupController {
         return result;
     }
 
-    static isStoreWindow(window){
+    static #isStoreWindow(window){
         const result = window.tabs.some(
             tab=> tab.url.endsWith("flag.html" ));
         return result;
     }
+}
+
+class tabGroupController {
         
     static async moveGroupsByNameToWindow(windowId, listOfNames ){
         const tabGroups= await chrome.tabGroups.query({});
@@ -162,7 +165,7 @@ class tabGroupController {
     }
     
     static async hide(list=new EveryThing()){
-        const windowId=await this.storeWindowId();
+        const windowId=await StoreWindow.Id();
         this.moveGroupsByNameToWindow(windowId,list);
     }
     
@@ -221,7 +224,8 @@ class Store extends ObservedSubject{
             this.store.set({"time_weekParity": parity}),
             this.store.set({
                 "g:all 7":["7x3","7x4","7y3", "7y4"],
-                "g:all 8":["8x3","8x4","8y3", "8y4"],
+                "g:all 8":{"sw":"8"},
+                "g:all man": [{"sw":"man"},{"sw":"help"},"document"],
             })
         ]).then( values => {
         }).catch(error => {          

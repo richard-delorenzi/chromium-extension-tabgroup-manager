@@ -148,11 +148,12 @@ class StoreWindow {
 }
 
 class tabGroupController {
+
         
-    static async moveGroupsByNameToWindow(windowId, listOfNames ){
+    static async moveGroupsToWindowByName(windowId, listOfNames ){
         const tabGroups= await chrome.tabGroups.query({});
         tabGroups
-            .filter( group => listOfNames.includes(group.title) )
+            .filter( group => listOfNames.includes(group.title) ) // strategy
             .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: as errors.
             .forEach(
                 group => {
@@ -166,12 +167,12 @@ class tabGroupController {
     
     static async hide(list=new EveryThing()){
         const windowId=await StoreWindow.Id();
-        this.moveGroupsByNameToWindow(windowId,list);
+        this.moveGroupsToWindowByName(windowId,list);
     }
     
     static async show(list=new EveryThing()){
         const windowId=(await chrome.windows.getCurrent()).id;
-        this.moveGroupsByNameToWindow(windowId,list);
+        this.moveGroupsToWindowByName(windowId,list);
     }
 }
 

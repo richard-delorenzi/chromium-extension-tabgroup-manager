@@ -149,21 +149,21 @@ class StoreWindow {
     }
 }
 
+function listIncludes(list,group_title){
+    const is_directMatch= list.includes(group_title);
+    const is_indirectMatch = list
+          .filter( item => !(typeof item === "string") )
+          .some( item => startsWith(item, group_title) )
+    ;
+    return is_directMatch || is_indirectMatch;
+}
+
+function startsWith(obj,group_title){
+    const start=obj.sw;
+    return group_title.startsWith(start);
+}
+
 class tabGroupController {
-
-    static #listIncludes(list,group_title){
-        const is_directMatch= list.includes(group_title);
-        const is_indirectMatch = list
-            .filter( item => !(typeof item === "string") )
-              .some( item => this.#startsWith(item, group_title) )
-        ;
-        return is_directMatch || is_indirectMatch;
-    }
-
-    static #startsWith(obj,group_title){
-        const start=obj.sw;
-        return group_title.startsWith(start);
-    }
     
     static async #moveGroupsToWindowByStrategy(windowId, strategy, obj ){
         const tabGroups= await chrome.tabGroups.query({});
@@ -182,11 +182,11 @@ class tabGroupController {
     }
 
     static async moveGroupsToWindowByName(windowId, listOfNames ){
-        this.#moveGroupsToWindowByStrategy(windowId, this.#listIncludes.bind(this), listOfNames );
+        this.#moveGroupsToWindowByStrategy(windowId, listIncludes, listOfNames );
     }
 
     static async moveGroupsToWindowByStartsWith(windowId, obj ){
-        this.#moveGroupsToWindowByStrategy(windowId, this.#startsWith.bind(this), obj );
+        this.#moveGroupsToWindowByStrategy(windowId, startsWith, obj );
     }
 
     static async moveGroupsToWindow(windowId, obj ){

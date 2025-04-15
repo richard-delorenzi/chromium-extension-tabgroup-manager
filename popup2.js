@@ -1,6 +1,9 @@
 "use strict";
 
 class Observer{
+    constructor(observedSubject){
+        observedSubject.register(this);
+    }
     update(){
     }
 }
@@ -47,7 +50,7 @@ function display({datas, heading}={}){
 
 class Time extends Observer{
     constructor(store){
-        super();
+        super(store);
         this.store=store;
     }
     update(){
@@ -109,7 +112,6 @@ class EveryThing{
         return true;
     }
 }
-
 
 class StoreWindow {
     static async #create(){
@@ -195,7 +197,7 @@ class tabGroupController {
 
 class Buttons extends Observer{
     constructor(store) {
-        super();
+        super(store);
         this.store=store;
     }
     update(){
@@ -262,7 +264,7 @@ class Store extends ObservedSubject{
 
 class SimpleStoreObserver extends Observer {
     constructor(store){
-        super();
+        super(store);
         this.store=store;
     }
     update(){
@@ -280,9 +282,6 @@ class Factory{
         this.time = new Time(this.store);
         this.buttons=new Buttons(this.store);
 
-        this.store.register(this.store_observer);
-        this.store.register(this.time);
-        this.store.register(this.buttons);
         this.store.load();
     }
 }

@@ -7,22 +7,37 @@
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
-    <section id="tab-group-selector">
-      <h1>Tab Groups</h1>
+    <section id="mode">
+      <h1>Mode</h1>
       <ul>
-        <template id="item">
-          <li>
-            <span id="name"></span>
-            <button id="hide">Hide</button>
-            <button id="show">Show</button>
-          </li>
-        </template>
+        <input type="checkbox" id="tt-mode" name="" value="">
+        <label for="tt-mode">Auto: time-table mode</label><br>
+      </ul>
+    </section>
+
+    <section id="tab-day-selector">
+      <h1>Days</h1>
+      <ul> 
       </ul>
     </section>
     
-    <p id="button-notes">blank</p>
+    <section id="tab-group-selector">
+      <h1>Tab Groups</h1>
+      <ul> 
+      </ul>
+    </section>
+    
+    <template id="button-item">
+      <li>
+        <span id="name"></span>
+        <button id="hide">Hide</button>
+        <button id="show">Show</button>
+      </li>
+    </template>
 
     <!-- debug stuff -->
+    <p id="button-notes">blank</p>
+
     <div id="output"></div>
     
     <template id="template">

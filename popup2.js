@@ -222,18 +222,20 @@ class Buttons extends Observer{
     }
     
     enable_buttons(){
-        const output= document.querySelector('#tab-group-selector ul');
-        const buttons_template=document.querySelector('#tab-group-selector ul #item');
+        this.enable_set_buttons('#tab-group-selector ul',"g:");
+        this.enable_set_buttons('#tab-day-selector ul',"tt:");
+    }
+
+    enable_set_buttons(target, set){
+        const output= document.querySelector(target);
+        const buttons_template=document.querySelector('#button-item');
         const data=this.store.data;
-        const keys= Object.keys(data)
-              .filter(key => key.startsWith("g:"))
-        ;
-        //debug_heading("buttons");
-        //debug(JSON.stringify(keys));
-        keys.forEach( key => {
+        
+        Object.keys(data)
+            .filter(key => key.startsWith(set))
+            .forEach( key => {
             const name=key.substring(2);
             const value=data[key];
-            //debug(JSON.stringify([key,value]));
 
             const buttons=buttons_template.content.cloneNode(true);
             buttons.querySelector("#name").textContent=name;
@@ -262,8 +264,9 @@ class Store extends ObservedSubject{
             this.store.set({
                 "g:all 7":["7x3","7x4","7y3", "7y4"],
                 "g:all 8":{"sw":"8"},
-                "g:all man": [{"sw":"man"},{"sw":"help"},"document"],
-                "g:all man2": {"sw": ["man", "help"]},
+                //"g:all man": [{"sw":"man"},{"sw":"help"},"document"],
+                //"g:all man2": {"sw": ["man", "help"]},
+                "tt:a-wed":["7x3","8x3"],
             })
         ]).then( values => {
         }).catch(error => {          

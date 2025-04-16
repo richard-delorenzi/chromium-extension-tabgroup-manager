@@ -160,7 +160,11 @@ function listIncludes(list,group_title){
 
 function startsWith(obj,group_title){
     const start=obj.sw;
-    return group_title.startsWith(start);
+    if (Array.isArray(start) ) {
+        return start.some( item => group_title.startsWith(item));
+    }else{
+        return group_title.startsWith(start);
+    }
 }
 
 class tabGroupController {
@@ -259,6 +263,7 @@ class Store extends ObservedSubject{
                 "g:all 7":["7x3","7x4","7y3", "7y4"],
                 "g:all 8":{"sw":"8"},
                 "g:all man": [{"sw":"man"},{"sw":"help"},"document"],
+                "g:all man2": {"sw": ["man", "help"]},
             })
         ]).then( values => {
         }).catch(error => {          

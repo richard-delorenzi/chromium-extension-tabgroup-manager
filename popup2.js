@@ -65,7 +65,7 @@ class Time extends Observer{
         const locale = navigator.language;
         const today = new Date();
         const options = { weekday: "short" };
-        return new Intl.DateTimeFormat(locale, options).format(today);
+        return new Intl.DateTimeFormat(locale, options).format(today).toLowerCase();
     }
 
     #weekParity = 0;
@@ -90,7 +90,7 @@ class Time extends Observer{
 
     weekType(){
         //return A or B
-        return (this.#weeksSinceSeptember1()%2 == this.#weekParity) ? "A" : "B"; 
+        return (this.#weeksSinceSeptember1()%2 == this.#weekParity) ? "a" : "x"; 
     }
 
     #weeksSinceSeptember1() {
@@ -234,7 +234,14 @@ class Buttons extends Observer{
     enable_mode(){
         const day=Factory.the.time.today();
         debug(day);
-        document.querySelector('#mode p').textContent=day;     
+        document.querySelector('#mode p').textContent=day;
+        document.querySelector('#mode #today').addEventListener('click', async () => {
+            const data=Factory.the.store.data;
+            console.log(data);
+            const key="d:"+day;
+            const value=data[key];
+            tabGroupController.show(value);
+        });
     }
 
     enable_set_buttons(target, set){

@@ -56,8 +56,12 @@ class Time extends Observer{
     update(){
         this.#weekParity = this.store.data.time_weekParity;
     }
+
+    today(){
+        return this.weekType()+"-"+this.day();
+    }
     
-    static day(){
+    day(){
         const locale = navigator.language;
         const today = new Date();
         const options = { weekday: "short" };
@@ -222,8 +226,15 @@ class Buttons extends Observer{
     }
     
     enable_buttons(){
+        this.enable_mode();
         this.enable_set_buttons('#tab-group-selector ul',"g:");
-        this.enable_set_buttons('#tab-day-selector ul',"tt:");
+        this.enable_set_buttons('#tab-day-selector ul',"d:");
+    }
+
+    enable_mode(){
+        const day=Factory.the.time.today();
+        debug(day);
+        document.querySelector('#mode p').textContent=day;     
     }
 
     enable_set_buttons(target, set){
@@ -256,7 +267,6 @@ class Store extends ObservedSubject{
     data={};
     get store(){ return chrome.storage.sync;}
     save(){
-        debug("hello");
         const parity=Factory.the.time.weekParity;
         debug(parity);
         Promise.all([
@@ -266,20 +276,23 @@ class Store extends ObservedSubject{
                 "g:all 8":{"sw":"8"},
                 //"g:all man": [{"sw":"man"},{"sw":"help"},"document"],
                 //"g:all man2": {"sw": ["man", "help"]},
-                "tt:a-wed":["7x3","8x3"],
+                "d:a-wed":["7x3","8x3"],
+                "d:a-thur":["7x4","8x4"],
             })
         ]).then( values => {
         }).catch(error => {          
         });      
     }
     load(){
-        this.store.get().then( data => {
-            this.data=data;
-            if (data){
-                this._notify();
-            }
-        }).catch(error =>{
-        });
+        this.store.get()
+            .then( data => {
+                this.data=data;
+                if (data){
+                    this._notify();
+                }
+            }).catch(error =>{
+            })
+        ;
     }
 }
 
@@ -302,8 +315,9 @@ class Factory{
         this.store_observer=new SimpleStoreObserver(this.store);
         this.time = new Time(this.store);
         this.buttons=new Buttons(this.store);
-
-        this.store.load();
+    }
+    static start(){
+        this.the.store.load();
     }
 }
 
@@ -321,4 +335,5 @@ function debug_element(element){
     document.querySelector('#output').append(element);
 }
 
+Factory.start();
 //Factory.the.store.save();

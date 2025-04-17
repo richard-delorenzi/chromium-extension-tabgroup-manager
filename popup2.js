@@ -229,8 +229,8 @@ class Buttons extends Observer{
     enable_buttons(){
         this.enable_hide_show_all()
         this.enable_mode();
-        this.enable_set_buttons('#tab-group-selector ul',"g:");
-        this.enable_set_buttons('#tab-day-selector ul',"d:");
+        this.enable_set_buttons('#tab-group-selector',"g:");
+        this.enable_set_buttons('#tab-day-selector',"d:");
     }
 
     enable_hide_show_all(){
@@ -259,28 +259,30 @@ class Buttons extends Observer{
     }
 
     enable_set_buttons(target, set){
-        const output= document.querySelector(target);
+        const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');
         const data=this.store.data;
         
         Object.keys(data)
             .filter(key => key.startsWith(set))
             .forEach( key => {
-            const name=key.substring(2);
-            const value=data[key];
-
-            const buttons=buttons_template.content.cloneNode(true);
-            buttons.querySelector("#name").textContent=name;
-            buttons.querySelector("li").id=name;
-            buttons.querySelector("button#hide").addEventListener('click', async () => {
-                tabGroupController.hide(value);
-            });
-            buttons.querySelector("button#show").addEventListener('click', async () => {
-                tabGroupController.show(value);
-            });
-            
-            output.append(buttons);
-        });
+                const name=key.substring(2);
+                const value=data[key];
+                
+                const buttons=buttons_template.content.cloneNode(true);
+                buttons.querySelector("#name").textContent=name;
+                buttons.querySelector("li").id=name;
+                buttons.querySelector("button#hide").addEventListener('click', async () => {
+                    tabGroupController.hide(value);
+                });
+                buttons.querySelector("button#show").addEventListener('click', async () => {
+                    tabGroupController.show(value);
+                });
+                
+                output.append(buttons);
+            })
+        ;
+        document.querySelector(target).replaceChildren(output);
     }
 }
 
@@ -319,6 +321,12 @@ class Store extends ObservedSubject{
             })
         ;
     }
+    start(){
+        this.load();
+        chrome.storage.onChanged.addListener((changes,namespace) => {
+            this.load();
+        });
+    }
 }
 
 class SimpleStoreObserver extends Observer {
@@ -337,12 +345,12 @@ class Factory{
 
     constructor (){
         this.store = new Store();
-        this.store_observer=new SimpleStoreObserver(this.store);
+        //this.store_observer=new SimpleStoreObserver(this.store);
         this.time = new Time(this.store);
         this.buttons=new Buttons(this.store);
     }
     static start(){
-        this.the.store.load();
+        this.the.store.start();
     }
 }
 

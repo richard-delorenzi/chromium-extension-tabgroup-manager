@@ -293,20 +293,21 @@ class Buttons extends Observer{
         const target="#group-selector";
         chrome.tabGroups.query({})
             .then( tabs => {
-                tabs.forEach( tab => {
-                    const buttons=buttons_template.content.cloneNode(true);
-                    const name=tab.title;
-                    const value=[name];
-                    buttons.querySelector("#name").textContent=name;
-                    buttons.querySelector("li").id=name;
-                    buttons.querySelector("button#hide").addEventListener('click', async () => {
-                        tabGroupController.hide(value);
-                    });
-                    buttons.querySelector("button#show").addEventListener('click', async () => {
-                        tabGroupController.show(value);
-                    });
-                    output.append(buttons);
-                })
+                tabs.toSorted( (a,b) => a.title.localeCompare(b.title) )
+                    .forEach( tab => {
+                        const buttons=buttons_template.content.cloneNode(true);
+                        const name=tab.title;
+                        const value=[name];
+                        buttons.querySelector("#name").textContent=name;
+                        buttons.querySelector("li").id=name;
+                        buttons.querySelector("button#hide").addEventListener('click', async () => {
+                            tabGroupController.hide(value);
+                        });
+                        buttons.querySelector("button#show").addEventListener('click', async () => {
+                            tabGroupController.show(value);
+                        });
+                        output.append(buttons);
+                    })
                 document.querySelector(target).replaceChildren(output);
             })
         ;

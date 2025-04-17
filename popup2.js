@@ -54,10 +54,13 @@ class Time extends Observer{
         this.store=store;
     }
     update(){
-        this.#weekParity = this.store.data.time_weekParity;
+        this.weekParity = this.store.data.time_weekParity;
     }
 
     today(){
+        return this.weekType()+"-"+this.day();
+    }
+    tomorrow(){
         return this.weekType()+"-"+this.day();
     }
     
@@ -84,13 +87,13 @@ class Time extends Observer{
     }
 
     toggleWeekParity(){
-        if (this.#weekParity ===0){ this.#weekParity=1;}
-        else{ this.#weekParity=0;}
+        const weekParity = (this.#weekParity ===0)?1:0;
+        this.store.save_weekParity(weekParity);
     }
 
     weekType(){
         //return A or B
-        return (this.#weeksSinceSeptember1()%2 == this.#weekParity) ? "a" : "x"; 
+        return (this.#weeksSinceSeptember1()%2 == this.#weekParity) ? "a" : "b"; 
     }
 
     #weeksSinceSeptember1() {
@@ -111,8 +114,7 @@ class Time extends Observer{
     }
 }
 
-class EveryThing{
-}
+class EveryThing{}
 
 class StoreWindow {
     static async #create(){
@@ -242,8 +244,7 @@ class Buttons extends Observer{
     
     enable_mode(){
         const day=Factory.the.time.today();
-        debug(day);
-        document.querySelector('#mode p').textContent=day;
+        document.querySelector('#mode #day').textContent=day;
         document.querySelector('#mode #today').addEventListener('click', async () => {
             const data=Factory.the.store.data;
             console.log(data);
@@ -251,6 +252,9 @@ class Buttons extends Observer{
             const value=data[key];
             await tabGroupController.hide();
             tabGroupController.show(value);
+        });
+        document.querySelector('#mode #toggle-week').addEventListener('click', async () => {
+            Factory.the.time.toggleWeekParity();
         });
     }
 
@@ -284,10 +288,9 @@ class Store extends ObservedSubject{
     data={};
     get store(){ return chrome.storage.sync;}
     save(){
-        const parity=Factory.the.time.weekParity;
-        debug(parity);
+       // const parity=Factory.the.time.weekParity;
         Promise.all([
-            this.store.set({"time_weekParity": parity}),
+            //this.store.set({"time_weekParity": parity}),
             this.store.set({
                 //"g:all 7":["7x3","7x4","7y3", "7y4"],
                 //"g:all 8":{"sw":"8"},
@@ -301,6 +304,9 @@ class Store extends ObservedSubject{
         ]).then( values => {
         }).catch(error => {          
         });      
+    }
+    save_weekParity(parity){
+        this.store.set({"time_weekParity": parity});
     }
     load(){
         this.store.get()

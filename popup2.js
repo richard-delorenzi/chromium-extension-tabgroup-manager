@@ -112,9 +112,6 @@ class Time extends Observer{
 }
 
 class EveryThing{
-    includes(x){
-        return true;
-    }
 }
 
 class StoreWindow {
@@ -198,19 +195,21 @@ class tabGroupController {
     }
 
     static async moveGroupsToWindow(windowId, obj ){
-        if (Array.isArray(obj)){
+        if (obj === EveryThing){
+            this.#moveGroupsToWindowByStrategy(windowId, x => true, obj )
+        }else if (Array.isArray(obj)){
             this.moveGroupsToWindowByName(windowId,obj);
         }else{
             this.moveGroupsToWindowByStartsWith(windowId,obj);
         }
     }
     
-    static async hide(obj=new EveryThing()){
+    static async hide(obj=EveryThing){
         const windowId=await StoreWindow.Id();
         this.moveGroupsToWindow(windowId, obj );
     }
     
-    static async show(obj=new EveryThing()){
+    static async show(obj=EveryThing){
         const windowId=(await chrome.windows.getCurrent()).id;
         this.moveGroupsToWindow(windowId, obj );
     }
@@ -226,11 +225,21 @@ class Buttons extends Observer{
     }
     
     enable_buttons(){
+        this.enable_hide_show_all()
         this.enable_mode();
         this.enable_set_buttons('#tab-group-selector ul',"g:");
         this.enable_set_buttons('#tab-day-selector ul',"d:");
     }
 
+    enable_hide_show_all(){
+        document.querySelector('#mode #hide-all').addEventListener('click', async () => {
+            tabGroupController.hide();
+        });
+        document.querySelector('#mode #show-all').addEventListener('click', async () => {
+            tabGroupController.show();
+        });  
+    }
+    
     enable_mode(){
         const day=Factory.the.time.today();
         debug(day);
@@ -240,6 +249,7 @@ class Buttons extends Observer{
             console.log(data);
             const key="d:"+day;
             const value=data[key];
+            await tabGroupController.hide();
             tabGroupController.show(value);
         });
     }
@@ -279,12 +289,14 @@ class Store extends ObservedSubject{
         Promise.all([
             this.store.set({"time_weekParity": parity}),
             this.store.set({
-                "g:all 7":["7x3","7x4","7y3", "7y4"],
-                "g:all 8":{"sw":"8"},
+                //"g:all 7":["7x3","7x4","7y3", "7y4"],
+                //"g:all 8":{"sw":"8"},
+                "g:ex": ["ex"],
                 //"g:all man": [{"sw":"man"},{"sw":"help"},"document"],
                 //"g:all man2": {"sw": ["man", "help"]},
                 "d:a-wed":["7x3","8x3"],
-                "d:a-thur":["7x4","8x4"],
+                "d:a-thu":["7x4","8x4"],
+                "d:a-fri":["7y4","8y4"],
             })
         ]).then( values => {
         }).catch(error => {          
@@ -343,4 +355,4 @@ function debug_element(element){
 }
 
 Factory.start();
-//Factory.the.store.save();
+Factory.the.store.save();

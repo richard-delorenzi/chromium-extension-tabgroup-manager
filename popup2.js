@@ -229,8 +229,9 @@ class Buttons extends Observer{
     enable_buttons(){
         this.enable_hide_show_all()
         this.enable_today_mode();
-        this.enable_set_buttons('#tab-group-selector',"g:");
+        this.enable_set_buttons('#meta-group-selector',"g:");
         this.enable_set_buttons('#tab-day-selector',"d:");
+        this.enable_raw_group_buttons();
     }
 
     enable_hide_show_all(){
@@ -285,6 +286,30 @@ class Buttons extends Observer{
             })
         ;
         document.querySelector(target).replaceChildren(output);
+    }
+    enable_raw_group_buttons(){
+        const output=document.createElement('ul');
+        const buttons_template=document.querySelector('#button-item');
+        const target="#group-selector";
+        chrome.tabGroups.query({})
+            .then( tabs => {
+                tabs.forEach( tab => {
+                    const buttons=buttons_template.content.cloneNode(true);
+                    const name=tab.title;
+                    const value=[name];
+                    buttons.querySelector("#name").textContent=name;
+                    buttons.querySelector("li").id=name;
+                    buttons.querySelector("button#hide").addEventListener('click', async () => {
+                        tabGroupController.hide(value);
+                    });
+                    buttons.querySelector("button#show").addEventListener('click', async () => {
+                        tabGroupController.show(value);
+                    });
+                    output.append(buttons);
+                })
+                document.querySelector(target).replaceChildren(output);
+            })
+        ;
     }
 }
 

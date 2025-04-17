@@ -1,3 +1,19 @@
 body {
     min-width: 20em;
 }
+
+/*fold*/
+input[type="checkbox"]:not(:checked) + .foldable{
+    display:none;
+}
+.meta-group h1{
+    display: inline-block;
+}
+
+/*section*/
+.meta-group{
+    background-color:Gainsboro;
+}
+.meta-group:nth-child(2n){
+    background-color: whitesmoke;
+}

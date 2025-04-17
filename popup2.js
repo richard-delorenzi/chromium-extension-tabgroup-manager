@@ -302,6 +302,7 @@ class Store extends ObservedSubject{
                 "d:a-wed":["7x3","8x3"],
                 "d:a-thu":["7x4","8x4"],
                 "d:a-fri":["7y4","8y4"],
+                "d:b-thu":["9x1","9y1"],
             })
         ]).then( values => {
         }).catch(error => {          

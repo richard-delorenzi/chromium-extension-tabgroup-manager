@@ -228,7 +228,7 @@ class Buttons extends Observer{
     
     enable_buttons(){
         this.enable_hide_show_all()
-        this.enable_mode();
+        this.enable_today_mode();
         this.enable_set_buttons('#tab-group-selector',"g:");
         this.enable_set_buttons('#tab-day-selector',"d:");
     }
@@ -242,10 +242,11 @@ class Buttons extends Observer{
         });  
     }
     
-    enable_mode(){
+    enable_today_mode(){
         const day=Factory.the.time.today();
-        document.querySelector('#mode #day').textContent=day;
-        document.querySelector('#mode #today').addEventListener('click', async () => {
+        const button=document.querySelector('#mode template#today-button').content.cloneNode(true);
+        button.querySelector('#day').textContent=day;
+        button.querySelector('#today').addEventListener('click', async () => {
             const data=Factory.the.store.data;
             console.log(data);
             const key="d:"+day;
@@ -253,6 +254,7 @@ class Buttons extends Observer{
             await tabGroupController.hide();
             tabGroupController.show(value);
         });
+        document.querySelector('#mode #today-target').replaceChildren(button);
         document.querySelector('#mode #toggle-week').addEventListener('click', async () => {
             Factory.the.time.toggleWeekParity();
         });

@@ -9,10 +9,13 @@
   <body>
     <section id="mode">
       <h1>Mode</h1>
+      <template id="today-button">
+        <li><button id="today">Today <span id="day">status</span></button></li>
+      </template>
       <ul>
         <li><button id="hide-all">None</button></li>
         <li><button id="show-all">All</button></li>
-        <li><button id="today">Today <span id="day">status</span></button></li>
+        <div id="today-target"></div>
       </ul>
       <button id="toggle-week">Toggle Week</button>
     </section>

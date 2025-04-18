@@ -35,21 +35,19 @@ input[type="checkbox"]:not(:checked) + .hide-me{
     input[type="submit"] {
         display:none;
     }
-    input[type="radio"]#create:checked ~ .for-create {
-        display: initial;
-    }
-    input[type="radio"]#delete:checked ~ .for-delete {
-        display: initial;
-    }
+    
+    input[type="radio"]#create:checked ~ .for-create ,
+    
+    input[type="radio"]#delete:checked ~ .for-delete ,
     
     :has(input[type="radio"][name="week"]:checked) 
         ~ :has(input[type="radio"][name="day"]:checked)
-              ~ * input[type="submit"][name="set-day"]{
-        display: initial; 
-    }
+              ~ * input[type="submit"][name="set-day"] ,
     
     :has(input[type="text"][name="meta-name"]:valid)
-        ~ * input[type="submit"][name="set-meta"]{
+        ~ * input[type="submit"][name="set-meta"]
+
+    {
         display: initial;
     }
 }

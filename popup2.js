@@ -271,7 +271,7 @@ class Buttons extends Observer{
             .forEach( key => {
                 const name=key.substring(2);
                 const value=data[key];
-                
+
                 const buttons=buttons_template.content.cloneNode(true);
                 buttons.querySelector("#name").textContent=name;
                 buttons.querySelector("li").id=name;
@@ -294,10 +294,11 @@ class Buttons extends Observer{
         chrome.tabGroups.query({})
             .then( tabs => {
                 tabs.toSorted( (a,b) => a.title.localeCompare(b.title) )
-                    .forEach( tab => {
-                        const buttons=buttons_template.content.cloneNode(true);
+                    .forEach( tab => {    
                         const name=tab.title;
                         const value=[name];
+
+                        const buttons=buttons_template.content.cloneNode(true);
                         buttons.querySelector("#name").textContent=name;
                         buttons.querySelector("li").id=name;
                         buttons.querySelector("button#hide").addEventListener('click', async () => {

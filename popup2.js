@@ -376,19 +376,25 @@ class Settings {
         this.observe_day_set();
     }
 
+    async visible_tabgroups(){
+        //tabgroups in current window
+        const windowId= (await chrome.windows.getCurrent()).id;
+        const tabGroups= await chrome.tabGroups.query({});
+        const tabGroupNames =
+              tabGroups
+              .filter( group => group.windowId === windowId )
+              .map( group => group.title)
+        ;
+        return tabGroupNames;
+    }
+
     observe_meta_set(){
         const submit_button= document.querySelector('input[type="submit"][name="set-meta"]');
         const name_input=document.querySelector('input[type="text"][name="meta-name"]');
         submit_button.addEventListener('click', async () => {
             const name="g:"+name_input.value;
-            const windowId= (await chrome.windows.getCurrent()).id;
-            debug(windowId);
-            const tabGroups= await chrome.tabGroups.query({});
-            const tabGroupNames =
-                  tabGroups
-                  .filter( group => group.windowId === windowId )
-                  .map( group => group.title)
-            ;
+            const tabGroupNames = await this.visible_tabgroups();
+                 
             debug(name);
             debug(tabGroupNames);
         });

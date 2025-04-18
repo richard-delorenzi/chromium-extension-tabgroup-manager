@@ -59,17 +59,22 @@
           <p>
             Enable the groups that you want, then define a meta-group below.
           </p>
-          <input type="radio" id="meta" name="type" value="meta">
+          <input type="radio" id="meta" name="type">
           <label for="meta">Meta</label>
-          <input type="radio" id="day"  name="type" value="day">
+          <input type="radio" id="meta-starts-with" name="type">
+          <label for="meta-starts-with">Starts-with</label>
+          <input type="radio" id="day" name="type">
           <label for="day">Day</label>
           
-          <div class="for-meta">
+          <div class="for-meta for-meta-starts-with">
             <label for="name">Name</label>
             <input type="text" id="name" name="meta-name" required minlength="1">
           </div>
           <div class="for-meta">
             <input type="submit" value="Set Meta" name="set-meta" />
+          </div>
+          <div class="for-meta-starts-with">
+            <input type="submit" value="Set starts with" name="set-meta-starts-with" />
           </div>
           
           <div class="for-day">

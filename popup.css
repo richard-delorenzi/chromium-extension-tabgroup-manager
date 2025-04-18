@@ -23,13 +23,13 @@ input[type="checkbox"]:not(:checked) + .hide-me{
     /*create*/
     .for-create {
          display:none;
-        .for-day, .for-week, .for-meta {
+        .for-day, .for-week, .for-meta, .for-meta-starts-with {
             display: none;
         }
-        input[type="radio"]#meta:checked ~ .for-meta {
-            display:revert;
-        }
-        input[type="radio"]#day:checked ~ .for-day {
+        input[type="radio"]#meta:checked ~ .for-meta,
+        input[type="radio"]#meta-starts-with:checked ~ .for-meta-starts-with,
+        input[type="radio"]#day:checked ~ .for-day
+        {
             display:revert;   
         }
     }
@@ -45,7 +45,7 @@ input[type="checkbox"]:not(:checked) + .hide-me{
         display: revert;
     }
 
-    /*submit bottons*/
+    /*submit buttons*/
     
     input[type="submit"] {
         display:none;
@@ -53,11 +53,14 @@ input[type="checkbox"]:not(:checked) + .hide-me{
     
     :has(input[type="radio"][name="week"]:checked) 
         ~ :has(input[type="radio"][name="day"]:checked)
-              ~ * input[type="submit"][name="set-day"] ,
-    
+              ~ * input[type="submit"][name="set-day"],
+
+    :has(input[type="text"][name="meta-name"]:valid)
+        ~ * input[type="submit"][name="set-meta-starts-with"],
+
     :has(input[type="text"][name="meta-name"]:valid)
         ~ * input[type="submit"][name="set-meta"]
-
+        
     {
         display: revert;
     }

@@ -287,30 +287,37 @@ class Buttons extends Observer{
         ;
         document.querySelector(target).replaceChildren(output);
     }
-    enable_raw_group_buttons(){
+    #enable_raw_group_buttons(data){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');
         const target="#group-selector";
-        chrome.tabGroups.query({})
-            .then( tabs => {
-                tabs.toSorted( (a,b) => a.title.localeCompare(b.title) )
-                    .forEach( tab => {    
-                        const name=tab.title;
-                        const value=[name];
-
-                        const buttons=buttons_template.content.cloneNode(true);
-                        buttons.querySelector("#name").textContent=name;
-                        buttons.querySelector("li").id=name;
-                        buttons.querySelector("button#hide").addEventListener('click', async () => {
-                            tabGroupController.hide(value);
-                        });
-                        buttons.querySelector("button#show").addEventListener('click', async () => {
-                            tabGroupController.show(value);
-                        });
-                        output.append(buttons);
-                    })
-                document.querySelector(target).replaceChildren(output);
+        data
+            .forEach( tab => {    
+                const name=tab.title;
+                const value=[name];
+                
+                const buttons=buttons_template.content.cloneNode(true);
+                buttons.querySelector("#name").textContent=name;
+                buttons.querySelector("li").id=name;
+                buttons.querySelector("button#hide").addEventListener('click', async () => {
+                    tabGroupController.hide(value);
+                });
+                buttons.querySelector("button#show").addEventListener('click', async () => {
+                    tabGroupController.show(value);
+                });
+                output.append(buttons);
             })
+        ;
+        document.querySelector(target).replaceChildren(output);
+    }
+    enable_raw_group_buttons(){
+        chrome.tabGroups.query({})
+            .then(
+                tabs => {
+                    const data=tabs.toSorted( (a,b) => a.title.localeCompare(b.title) );
+                    this.#enable_raw_group_buttons(data);
+                }
+            )
         ;
     }
 }

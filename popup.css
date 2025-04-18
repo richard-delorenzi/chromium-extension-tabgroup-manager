@@ -19,7 +19,10 @@ input[type="checkbox"]:not(:checked) + .hide-me{
 }
 
 #setup {
+
+    /*create*/
     .for-create {
+         display:none;
         .for-day, .for-week, .for-meta {
             display: none;
         }
@@ -30,15 +33,23 @@ input[type="checkbox"]:not(:checked) + .hide-me{
             display:block;   
         }
     }
-    .for-delete,
-    .for-create,
+    input[type="radio"]#create:checked ~ .for-create {
+        display: block;
+    }
+
+    /*delete*/
+    .for-delete {
+        display:none;
+    }
+    input[type="radio"]#delete:checked ~ .for-delete {
+        display: block;
+    }
+
+    /*submit bottons*/
+    
     input[type="submit"] {
         display:none;
     }
-    
-    input[type="radio"]#create:checked ~ .for-create ,
-    
-    input[type="radio"]#delete:checked ~ .for-delete ,
     
     :has(input[type="radio"][name="week"]:checked) 
         ~ :has(input[type="radio"][name="day"]:checked)
@@ -48,6 +59,8 @@ input[type="checkbox"]:not(:checked) + .hide-me{
         ~ * input[type="submit"][name="set-meta"]
 
     {
-        display: initial;
+        display: block;
     }
+
+    /*  */
 }

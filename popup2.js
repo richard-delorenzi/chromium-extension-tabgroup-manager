@@ -261,10 +261,10 @@ class Buttons extends Observer{
         });
     }
         
-    #enable_set_buttons(it,target){
+    #enable_item(iterable,target){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');    
-        it
+        iterable
             .forEach( item => {
                 const buttons=buttons_template.content.cloneNode(true);
                 buttons.querySelector("#name").textContent=item.name;
@@ -281,25 +281,6 @@ class Buttons extends Observer{
         ;
         document.querySelector(target).replaceChildren(output);
     }
-    #enable_raw_group_buttons(it,target){
-        const output=document.createElement('ul');
-        const buttons_template=document.querySelector('#button-item');
-        it
-            .forEach( item => {     
-                const buttons=buttons_template.content.cloneNode(true);
-                buttons.querySelector("#name").textContent=item.name;
-                buttons.querySelector("li").id=item.name;
-                buttons.querySelector("button#hide").addEventListener('click', async () => {
-                    tabGroupController.hide(item.value);
-                });
-                buttons.querySelector("button#show").addEventListener('click', async () => {
-                    tabGroupController.show(item.value);
-                });
-                output.append(buttons);
-            })
-        ;
-        document.querySelector(target).replaceChildren(output);
-    }
 
     enable_set_buttons(target, set){
         const data= this.store.data;
@@ -308,7 +289,7 @@ class Buttons extends Observer{
               .filter(key => key.startsWith(set))
               .map( key => ({"name":key.substring(2), "value":data[key]}))
         ;
-        this.#enable_set_buttons(iterable, target);
+        this.#enable_item(iterable, target);
     }
     
     enable_raw_group_buttons(){
@@ -321,7 +302,7 @@ class Buttons extends Observer{
                           .toSorted( (a,b) => a.title.localeCompare(b.title) )
                           .map( tab => ({"name":tab.title, "value":[tab.title]}))
                     ;
-                    this.#enable_raw_group_buttons(iterable, target);
+                    this.#enable_item(iterable, target);
                 }
             )
         ;

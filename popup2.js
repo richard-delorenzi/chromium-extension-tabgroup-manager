@@ -369,6 +369,35 @@ class SimpleStoreObserver extends Observer {
     }
 }
 
+class Settings {
+    constructor(store){
+        this.store=store;
+        this.observe_meta_set();
+        this.observe_day_set();
+    }
+
+    observe_meta_set(){
+        const submit_button= document.querySelector('input[type="submit"][name="set-meta"]');
+        const name_input=document.querySelector('input[type="text"][name="meta-name"]');
+        submit_button.addEventListener('click', async () => {
+            const name="g:"+name_input.value;
+            const windowId= (await chrome.windows.getCurrent()).id;
+            debug(windowId);
+            const tabGroups= await chrome.tabGroups.query({});
+            const tabGroupNames =
+                  tabGroups
+                  .filter( group => group.windowId === windowId )
+                  .map( group => group.title)
+            ;
+            debug(name);
+            debug(tabGroupNames);
+        });
+    }
+    observe_day_set(){
+
+    }
+}
+
 class Factory{
     static the = new Factory();
 
@@ -377,6 +406,7 @@ class Factory{
         //this.store_observer=new SimpleStoreObserver(this.store);
         this.time = new Time(this.store);
         this.buttons=new Buttons(this.store);
+        this.settings=new Settings(this.store);
     }
     static start(){
         this.the.store.start();

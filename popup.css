@@ -27,14 +27,14 @@ input[type="checkbox"]:not(:checked) + .hide-me{
             display: none;
         }
         input[type="radio"]#meta:checked ~ .for-meta {
-            display:block;
+            display:revert;
         }
         input[type="radio"]#day:checked ~ .for-day {
-            display:block;   
+            display:revert;   
         }
     }
     input[type="radio"]#create:checked ~ .for-create {
-        display: block;
+        display: revert;
     }
 
     /*delete*/
@@ -42,7 +42,7 @@ input[type="checkbox"]:not(:checked) + .hide-me{
         display:none;
     }
     input[type="radio"]#delete:checked ~ .for-delete {
-        display: block;
+        display: revert;
     }
 
     /*submit bottons*/
@@ -59,7 +59,7 @@ input[type="checkbox"]:not(:checked) + .hide-me{
         ~ * input[type="submit"][name="set-meta"]
 
     {
-        display: block;
+        display: revert;
     }
 
     /*  */

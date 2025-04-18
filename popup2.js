@@ -262,6 +262,10 @@ class Buttons extends Observer{
     }
 
     enable_set_buttons(target, set){
+        this.#enable_set_buttons(target, set);
+    }
+        
+    #enable_set_buttons(target, set){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');
         const data=this.store.data;

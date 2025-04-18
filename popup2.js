@@ -266,18 +266,15 @@ class Buttons extends Observer{
         const buttons_template=document.querySelector('#button-item');
         
         it
-            .forEach( key => {
-                const name=key.substring(2);
-                const value=data[key];
-
+            .forEach( it => {
                 const buttons=buttons_template.content.cloneNode(true);
-                buttons.querySelector("#name").textContent=name;
-                buttons.querySelector("li").id=name;
+                buttons.querySelector("#name").textContent=it.name;
+                buttons.querySelector("li").id=it.name;
                 buttons.querySelector("button#hide").addEventListener('click', async () => {
-                    tabGroupController.hide(value);
+                    tabGroupController.hide(it.value);
                 });
                 buttons.querySelector("button#show").addEventListener('click', async () => {
-                    tabGroupController.show(value);
+                    tabGroupController.show(it.value);
                 });
                 
                 output.append(buttons);
@@ -314,6 +311,7 @@ class Buttons extends Observer{
         const iterable=
               Object.keys(data)
               .filter(key => key.startsWith(set))
+              .map( key => ({"name":key.substring(2), "value":data[key]}))
         ;
         this.#enable_set_buttons(iterable,data, target);
     }

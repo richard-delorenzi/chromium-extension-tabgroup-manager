@@ -266,15 +266,15 @@ class Buttons extends Observer{
         const buttons_template=document.querySelector('#button-item');
         
         it
-            .forEach( it => {
+            .forEach( item => {
                 const buttons=buttons_template.content.cloneNode(true);
-                buttons.querySelector("#name").textContent=it.name;
-                buttons.querySelector("li").id=it.name;
+                buttons.querySelector("#name").textContent=item.name;
+                buttons.querySelector("li").id=item.name;
                 buttons.querySelector("button#hide").addEventListener('click', async () => {
-                    tabGroupController.hide(it.value);
+                    tabGroupController.hide(item.value);
                 });
                 buttons.querySelector("button#show").addEventListener('click', async () => {
-                    tabGroupController.show(it.value);
+                    tabGroupController.show(item.value);
                 });
                 
                 output.append(buttons);
@@ -282,23 +282,20 @@ class Buttons extends Observer{
         ;
         document.querySelector(target).replaceChildren(output);
     }
-    #enable_raw_group_buttons(data){
+    #enable_raw_group_buttons(it){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');
         const target="#group-selector";
-        data
-            .forEach( tab => {    
-                const name=tab.title;
-                const value=[name];
-                
+        it
+            .forEach( item => {     
                 const buttons=buttons_template.content.cloneNode(true);
-                buttons.querySelector("#name").textContent=name;
-                buttons.querySelector("li").id=name;
+                buttons.querySelector("#name").textContent=item.name;
+                buttons.querySelector("li").id=item.name;
                 buttons.querySelector("button#hide").addEventListener('click', async () => {
-                    tabGroupController.hide(value);
+                    tabGroupController.hide(item.value);
                 });
                 buttons.querySelector("button#show").addEventListener('click', async () => {
-                    tabGroupController.show(value);
+                    tabGroupController.show(item.value);
                 });
                 output.append(buttons);
             })
@@ -323,6 +320,7 @@ class Buttons extends Observer{
                     const iterable=
                           tabs
                           .toSorted( (a,b) => a.title.localeCompare(b.title) )
+                          .map( tab => ({"name":tab.title, "value":[tab.title]}))
                     ;
                     this.#enable_raw_group_buttons(iterable);
                 }

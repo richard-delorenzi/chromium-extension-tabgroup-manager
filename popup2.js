@@ -261,7 +261,7 @@ class Buttons extends Observer{
         });
     }
         
-    #enable_set_buttons(it,data,target){
+    #enable_set_buttons(it,target){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');
         
@@ -313,7 +313,7 @@ class Buttons extends Observer{
               .filter(key => key.startsWith(set))
               .map( key => ({"name":key.substring(2), "value":data[key]}))
         ;
-        this.#enable_set_buttons(iterable,data, target);
+        this.#enable_set_buttons(iterable, target);
     }
     
     enable_raw_group_buttons(){

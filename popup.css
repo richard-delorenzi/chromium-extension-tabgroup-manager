@@ -3,10 +3,10 @@ body {
 }
 
 /*fold*/
-input[type="checkbox"]:not(:checked) + .foldable{
+input[type="checkbox"]:not(:checked) + .hide-me{
     display:none;
 }
-.meta-group h1{
+.foldable h1{
     display: inline-block;
 }
 
@@ -16,4 +16,40 @@ input[type="checkbox"]:not(:checked) + .foldable{
 }
 .meta-group:nth-child(2n){
     background-color: whitesmoke;
+}
+
+#setup {
+    .for-create {
+        .for-day, .for-week, .for-meta {
+            display: none;
+        }
+        input[type="radio"]#meta:checked ~ .for-meta {
+            display:block;
+        }
+        input[type="radio"]#day:checked ~ .for-day {
+            display:block;   
+        }
+    }
+    .for-delete,
+    .for-create,
+    input[type="submit"] {
+        display:none;
+    }
+    input[type="radio"]#create:checked ~ .for-create {
+        display: initial;
+    }
+    input[type="radio"]#delete:checked ~ .for-delete {
+        display: initial;
+    }
+    
+    :has(input[type="radio"][name="week"]:checked) 
+        ~ :has(input[type="radio"][name="day"]:checked)
+              ~ * input[type="submit"][name="set-day"]{
+        display: initial; 
+    }
+    
+    :has(input[type="text"][name="meta-name"]:valid)
+        ~ * input[type="submit"][name="set-meta"]{
+        display: initial;
+    }
 }

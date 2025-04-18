@@ -20,9 +20,9 @@
       <button id="toggle-week">Toggle Week</button>
     </section>
 
-    <section class="meta-group days">
+    <section class="meta-group days foldable">
       <h1>Days</h1><input type="checkbox">
-      <div id="tab-day-selector" class="foldable"><div>
+      <div id="tab-day-selector" class="hide-me"><div>
     </section>
     
     <section class="meta-group">
@@ -30,10 +30,10 @@
       <div id="meta-group-selector"></div>
     </section>
 
-    <section class="meta-group">
+    <section class="meta-group foldable">
       <h1>Raw Groups</h1>
       <input type="checkbox">
-      <div id="group-selector" class="foldable"></div>
+      <div id="group-selector" class="hide-me"></div>
     </section>
     
     <template id="button-item">
@@ -44,6 +44,62 @@
         <span id="name"></span>
       </li>
     </template>
+
+    <section id="setup" class="foldable">
+      <h1>Setup</h1>
+      <input type="checkbox">
+      <div class="hide-me">
+      
+        <input type="radio" id="create" name="action" value="create">
+        <label for="meta">Create</label>
+        <input type="radio" id="delete" name="action" value="delete">
+        <label for="meta">Delete</label>
+
+        <div class="for-create">
+          <p>
+            Enable the groups that you want, then define a meta-group below.
+          </p>
+          <input type="radio" id="meta" name="type" value="meta">
+          <label for="meta">Meta</label>
+          <input type="radio" id="day"  name="type" value="day">
+          <label for="day">Day</label>
+          
+          <div class="for-meta">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="meta-name" required minlength="1">
+          </div>
+          <div class="for-meta">
+            <input type="submit" value="Set Meta" name="set-meta" />
+          </div>
+          
+          
+          <div class="for-day">
+            <input type="radio" id="week-a" name="week" value="a">
+            <label for="week-a">Week A</label>
+            <input type="radio" id="week-b" name="week" value="b">
+            <label for="week-b">Week B</label>
+          </div>
+          <div class="for-day">
+            <input type="radio" id="mon" name="day" value="mon">
+            <label for="mon">Mon</label>
+            <input type="radio" id="tue" name="day" value="tue">
+            <label for="tue">Tue</label>
+            <input type="radio" id="wed" name="day" value="wed">
+            <label for="wed">Wed</label>
+            <input type="radio" id="thu" name="day" value="thu">
+            <label for="thu">Thu</label>
+            <input type="radio" id="fri" name="day" value="fri">
+            <label for="fri">Fri</label>
+          </div>
+          <div class="for-day">
+            <input type="submit" value="Set Day" name="set-day" />
+          </div>
+        </div> <!--end for create-->
+        <div class="for-delete">
+          delete
+        </div>
+      </div> <!--end hide-me-->
+    </section>
 
     <!-- debug stuff -->
     <div id="output"></div>

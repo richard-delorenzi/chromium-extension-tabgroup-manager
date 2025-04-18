@@ -261,7 +261,7 @@ class Buttons extends Observer{
         });
     }
         
-    #enable_item(iterable,target){
+    #enable_item_buttons(iterable,target){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');    
         iterable
@@ -273,6 +273,10 @@ class Buttons extends Observer{
                     tabGroupController.hide(item.value);
                 });
                 buttons.querySelector("button#show").addEventListener('click', async () => {
+                    tabGroupController.show(item.value);
+                });
+                buttons.querySelector("button#only").addEventListener('click', async () => {
+                    await tabGroupController.hide();
                     tabGroupController.show(item.value);
                 });
                 
@@ -289,7 +293,7 @@ class Buttons extends Observer{
               .filter(key => key.startsWith(set))
               .map( key => ({"name":key.substring(2), "value":data[key]}))
         ;
-        this.#enable_item(iterable, target);
+        this.#enable_item_buttons(iterable, target);
     }
     
     enable_raw_group_buttons(){
@@ -302,7 +306,7 @@ class Buttons extends Observer{
                           .toSorted( (a,b) => a.title.localeCompare(b.title) )
                           .map( tab => ({"name":tab.title, "value":[tab.title]}))
                     ;
-                    this.#enable_item(iterable, target);
+                    this.#enable_item_buttons(iterable, target);
                 }
             )
         ;
@@ -326,6 +330,7 @@ class Store extends ObservedSubject{
                 "d:a-thu":["7x4","8x4"],
                 "d:a-fri":["7y4","8y4"],
                 "d:b-thu":["9x1","9y1"],
+                "d:b-fri":["7x3","8x3"],
             })
         ]).then( values => {
         }).catch(error => {          

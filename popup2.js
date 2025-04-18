@@ -311,7 +311,10 @@ class Buttons extends Observer{
 
     enable_set_buttons(target, set){
         const data= this.store.data;
-        const iterable= Object.keys(data).filter(key => key.startsWith(set));
+        const iterable=
+              Object.keys(data)
+              .filter(key => key.startsWith(set))
+        ;
         this.#enable_set_buttons(iterable,data, target);
     }
     
@@ -319,7 +322,10 @@ class Buttons extends Observer{
         chrome.tabGroups.query({})
             .then(
                 tabs => {
-                    const iterable=tabs.toSorted( (a,b) => a.title.localeCompare(b.title) );
+                    const iterable=
+                          tabs
+                          .toSorted( (a,b) => a.title.localeCompare(b.title) )
+                    ;
                     this.#enable_raw_group_buttons(iterable);
                 }
             )

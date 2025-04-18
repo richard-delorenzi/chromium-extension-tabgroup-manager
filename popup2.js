@@ -260,18 +260,12 @@ class Buttons extends Observer{
             Factory.the.time.toggleWeekParity();
         });
     }
-
-    enable_set_buttons(target, set){
-        this.#enable_set_buttons(target, set);
-    }
         
-    #enable_set_buttons(target, set){
+    #enable_set_buttons(it,data,target, set){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');
-        const data=this.store.data;
         
-        Object.keys(data)
-            .filter(key => key.startsWith(set))
+        it
             .forEach( key => {
                 const name=key.substring(2);
                 const value=data[key];
@@ -314,6 +308,13 @@ class Buttons extends Observer{
         ;
         document.querySelector(target).replaceChildren(output);
     }
+
+    enable_set_buttons(target, set){
+        const data= this.store.data;
+        const it= Object.keys(data).filter(key => key.startsWith(set));
+        this.#enable_set_buttons(it,data, target, set);
+    }
+    
     enable_raw_group_buttons(){
         chrome.tabGroups.query({})
             .then(

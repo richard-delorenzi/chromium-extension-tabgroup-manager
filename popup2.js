@@ -263,8 +263,7 @@ class Buttons extends Observer{
         
     #enable_set_buttons(it,target){
         const output=document.createElement('ul');
-        const buttons_template=document.querySelector('#button-item');
-        
+        const buttons_template=document.querySelector('#button-item');    
         it
             .forEach( item => {
                 const buttons=buttons_template.content.cloneNode(true);
@@ -282,10 +281,9 @@ class Buttons extends Observer{
         ;
         document.querySelector(target).replaceChildren(output);
     }
-    #enable_raw_group_buttons(it){
+    #enable_raw_group_buttons(it,target){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');
-        const target="#group-selector";
         it
             .forEach( item => {     
                 const buttons=buttons_template.content.cloneNode(true);
@@ -314,6 +312,7 @@ class Buttons extends Observer{
     }
     
     enable_raw_group_buttons(){
+        const target="#group-selector";
         chrome.tabGroups.query({})
             .then(
                 tabs => {
@@ -322,7 +321,7 @@ class Buttons extends Observer{
                           .toSorted( (a,b) => a.title.localeCompare(b.title) )
                           .map( tab => ({"name":tab.title, "value":[tab.title]}))
                     ;
-                    this.#enable_raw_group_buttons(iterable);
+                    this.#enable_raw_group_buttons(iterable, target);
                 }
             )
         ;

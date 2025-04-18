@@ -394,13 +394,24 @@ class Settings {
         submit_button.addEventListener('click', async () => {
             const name="g:"+name_input.value;
             const tabGroupNames = await this.visible_tabgroups();
-                 
-            debug(name);
-            debug(tabGroupNames);
+            const save_item = {
+                [name]: tabGroupNames
+            };
+            this.store.store.set(save_item);
         });
     }
     observe_day_set(){
-
+        const submit_button= document.querySelector('input[type="submit"][name="set-day"]');
+        submit_button.addEventListener('click', async () => {
+            const week_input=document.querySelector('input[type="radio"][name="week"]:checked');
+            const day_input=document.querySelector('input[type="radio"][name="day"]:checked');
+            const name="d:" +week_input.value+ "-" +day_input.value
+            const tabGroupNames = await this.visible_tabgroups();
+            const save_item = {
+                [name]: tabGroupNames
+            };
+            this.store.store.set(save_item);
+       });
     }
 }
 

@@ -261,7 +261,7 @@ class Buttons extends Observer{
         });
     }
         
-    #enable_set_buttons(it,data,target, set){
+    #enable_set_buttons(it,data,target){
         const output=document.createElement('ul');
         const buttons_template=document.querySelector('#button-item');
         
@@ -311,16 +311,16 @@ class Buttons extends Observer{
 
     enable_set_buttons(target, set){
         const data= this.store.data;
-        const it= Object.keys(data).filter(key => key.startsWith(set));
-        this.#enable_set_buttons(it,data, target, set);
+        const iterable= Object.keys(data).filter(key => key.startsWith(set));
+        this.#enable_set_buttons(iterable,data, target);
     }
     
     enable_raw_group_buttons(){
         chrome.tabGroups.query({})
             .then(
                 tabs => {
-                    const data=tabs.toSorted( (a,b) => a.title.localeCompare(b.title) );
-                    this.#enable_raw_group_buttons(data);
+                    const iterable=tabs.toSorted( (a,b) => a.title.localeCompare(b.title) );
+                    this.#enable_raw_group_buttons(iterable);
                 }
             )
         ;

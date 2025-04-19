@@ -56,10 +56,7 @@
         <input type="radio" id="delete" name="action" value="delete">
         <label for="meta">Delete</label>
 
-        <div class="for-create">
-          <p>
-            Enable the groups that you want, then define a meta-group below.
-          </p>
+        <section class="for-create">
           <input type="radio" id="meta" name="type">
           <label for="meta">Meta</label>
           <input type="radio" id="meta-starts-with" name="type">
@@ -81,32 +78,38 @@
           <div class="for-meta-starts-with">
             <input type="submit" value="Set starts with" name="set-meta-starts-with" />
           </div>
+
+          <div id="choose-day" class="for-day">
+            <div id="choose-today">
+              <input type="submit" value="Set Today" name="set-today"> or
+            </div>
+            <div id="choose-week">
+              <input type="radio" name="week" value="a">
+              <label for="week-a">Week A</label>
+              <input type="radio" name="week" value="b">
+              <label for="week-b">Week B</label>
+            </div>
+            <div id="choose-day-of-week" >
+              <input type="radio" id="mon" name="day" value="mon">
+              <label for="mon">Mon</label>
+              <input type="radio" id="tue" name="day" value="tue">
+              <label for="tue">Tue</label>
+              <input type="radio" id="wed" name="day" value="wed">
+              <label for="wed">Wed</label>
+              <input type="radio" id="thu" name="day" value="thu">
+              <label for="thu">Thu</label>
+              <input type="radio" id="fri" name="day" value="fri">
+              <label for="fri">Fri</label>
+            </div>
+            <div id="set-day">
+              <input type="submit" value="Set Day" name="set-day" />
+            </div>
+          </div>
           
-          <div class="for-day">
-            <input type="radio" name="week" value="a">
-            <label for="week-a">Week A</label>
-            <input type="radio" name="week" value="b">
-            <label for="week-b">Week B</label>
-          </div>
-          <div class="for-day">
-            <input type="radio" id="mon" name="day" value="mon">
-            <label for="mon">Mon</label>
-            <input type="radio" id="tue" name="day" value="tue">
-            <label for="tue">Tue</label>
-            <input type="radio" id="wed" name="day" value="wed">
-            <label for="wed">Wed</label>
-            <input type="radio" id="thu" name="day" value="thu">
-            <label for="thu">Thu</label>
-            <input type="radio" id="fri" name="day" value="fri">
-            <label for="fri">Fri</label>
-          </div>
-          <div class="for-day">
-            <input type="submit" value="Set Day" name="set-day" />
-          </div>
-        </div> <!--end for create-->
-        <div class="for-delete">
+        </section> <!--end for create-->
+        <section class="for-delete">
           delete
-        </div>
+        </section>
       </div> <!--end hide-me-->
     </section>
 

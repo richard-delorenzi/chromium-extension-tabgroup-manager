@@ -50,6 +50,8 @@ input[type="checkbox"]:not(:checked) + .hide-me{
     input[type="submit"] {
         display:none;
     }
+
+    input[type="submit"][name="set-today"],
     
     :has(input[type="radio"][name="week"]:checked) 
         ~ :has(input[type="radio"][name="day"]:checked)

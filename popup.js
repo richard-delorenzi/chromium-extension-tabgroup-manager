@@ -374,10 +374,11 @@ class Settings {
         this.store=store;
         this.observe_meta_set();
         this.observe_day_set();
+        this.observe_today_set();
         this.observe_meta_startswith_set();
     }
 
-    async visible_tabgroups(){
+    async #visible_tabgroups(){
         //tabgroups in current window
         const windowId= (await chrome.windows.getCurrent()).id;
         const tabGroups= await chrome.tabGroups.query({});
@@ -409,11 +410,7 @@ class Settings {
         const name_input=document.querySelector('input[type="text"][name="meta-name"]');
         submit_button.addEventListener('click', async () => {
             const name="g:"+name_input.value;
-            const tabGroupNames = await this.visible_tabgroups();
-            const save_item = {
-                [name]: tabGroupNames
-            };
-            this.store.store.set(save_item);
+            this.#write_current_groups_to(name);
         });
     }
     observe_day_set(){
@@ -421,13 +418,27 @@ class Settings {
         submit_button.addEventListener('click', async () => {
             const week_input=document.querySelector('input[type="radio"][name="week"]:checked');
             const day_input=document.querySelector('input[type="radio"][name="day"]:checked');
-            const name="d:" +week_input.value+ "-" +day_input.value
-            const tabGroupNames = await this.visible_tabgroups();
-            const save_item = {
-                [name]: tabGroupNames
-            };
-            this.store.store.set(save_item);
+            const day=day_input.value;
+            const week=week_input.value;
+            const name="d:" +week+ "-" +day;
+            this.#write_current_groups_to(name);
        });
+    }
+
+     observe_today_set(){
+        const submit_button= document.querySelector('input[type="submit"][name="set-today"]');
+        submit_button.addEventListener('click', async () => {       
+            const name="d:"+Factory.the.time.today();
+            this.#write_current_groups_to(name);
+       });
+    }
+
+    async #write_current_groups_to(name){
+        const tabGroupNames = await this.#visible_tabgroups();
+        const save_item = {
+            [name]: tabGroupNames
+        };
+        this.store.store.set(save_item);
     }
 }
 
@@ -461,4 +472,3 @@ function debug_element(element){
 }
 
 Factory.start();
-Factory.the.store.save();

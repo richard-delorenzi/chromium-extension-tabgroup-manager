@@ -12,8 +12,6 @@
     "default_popup": "popup.html"
   },
     "host_permissions": [
-        "https://www.wikipedia.org/*",
-        "https://developer.chrome.com/*"
     ],
     "permissions": [
         "storage",

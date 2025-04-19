@@ -374,6 +374,7 @@ class Settings {
         this.store=store;
         this.observe_meta_set();
         this.observe_day_set();
+        this.observe_meta_startswith_set();
     }
 
     async visible_tabgroups(){
@@ -386,6 +387,21 @@ class Settings {
               .map( group => group.title)
         ;
         return tabGroupNames;
+    }
+
+    observe_meta_startswith_set(){
+        const submit_button=
+              document.querySelector('input[type="submit"][name="set-meta-starts-with"]');
+        const name_input=document.querySelector('input[type="text"][name="meta-name"]');
+        submit_button.addEventListener('click', async () => {
+            const name="g:"+name_input.value;
+            const value_input=
+                  document.querySelector('input[type="text"][name="meta-starts-with"]');
+            const save_item = {
+                [name]: {"sw":value_input.value}
+            };
+            this.store.store.set(save_item);
+        });
     }
 
     observe_meta_set(){

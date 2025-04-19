@@ -54,7 +54,7 @@ class Time extends Observer{
         this.store=store;
     }
     update(){
-        this.weekParity = this.store.data.time_weekParity;
+        this.weekParity = this.store.data?.time_weekParity??0;
     }
 
     today(){

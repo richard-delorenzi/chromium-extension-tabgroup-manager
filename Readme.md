@@ -17,5 +17,5 @@ The ability to close tabs and bring them back, would be a good back-end for this
 ## Licence
 [Gnu GPL](https://www.gnu.org/licenses/gpl-3.0.en.html) — If you distribute copies of this program, then you must tell your users where you got it (all of the official sources below), and show them the licence.
 
-https://bitbucket.org/davids_dad/chromium-extension-tabgroup-manager/src/main/
-https://github.com/richard-delorenzi/chromium-extension-tabgroup-manager
+* https://bitbucket.org/davids_dad/chromium-extension-tabgroup-manager/src/main/
+* https://github.com/richard-delorenzi/chromium-extension-tabgroup-manager

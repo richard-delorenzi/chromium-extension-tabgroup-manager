@@ -175,19 +175,22 @@ function titleStartsWith(obj,group){
 class tabGroupController {
     
     static async #moveGroupsToWindowByStrategy(windowId, strategy, obj ){
-        const tabGroups= await chrome.tabGroups.query({});
-        tabGroups
-            .filter( group => strategy(obj,group) )
-            .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: or else api will error.
-            .forEach(
-                group => {
-                    chrome.tabGroups.move(
-                        group.id,
-                        { index: -1, windowId}
-                    );
-                }
-            )
+        const allTabGroups= await chrome.tabGroups.query({});
+        const tabGroups=
+              allTabGroups
+              .filter( group => strategy(obj,group) )
+              .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: or else api will error.
         ;
+        debug_heading("all");
+        debug(allTabGroups.map(tg => tg.title));
+        debug_heading("filtered");
+        debug(tabGroups.map(tg => tg.title));
+        for (const group of tabGroups){
+            await chrome.tabGroups.move(
+                group.id,
+                { index: -1, windowId}
+            );
+        }
     }
 
     static async moveGroupsToWindowByName(windowId, listOfNames ){

@@ -200,7 +200,15 @@ class tabGroupController {
 
     static async moveGroupsToWindow(windowId, obj ){
         if (obj === EveryThing){
-            this.#moveGroupsToWindowByStrategy(windowId, x => true, obj )
+            chrome.windows.getCurrent()
+                .then( current_window => {
+                    this.#moveGroupsToWindowByStrategy(
+                        windowId,
+                        (o,group)=> group.windowId === current_window.id,
+                        obj
+                    );
+                })
+            ;
         }else if (Array.isArray(obj)){
             this.moveGroupsToWindowByName(windowId,obj);
         }else{

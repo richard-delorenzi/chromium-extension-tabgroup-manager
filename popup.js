@@ -152,16 +152,18 @@ class StoreWindow {
     }
 }
 
-function listIncludes(list,group_title){
+function listIncludesTitle(list,group){
+    const group_title=group.title;
     const is_directMatch= list.includes(group_title);
     const is_indirectMatch = list
           .filter( item => !(typeof item === "string") )
-          .some( item => startsWith(item, group_title) )
+          .some( item => titleStartsWith(item, group) )
     ;
     return is_directMatch || is_indirectMatch;
 }
 
-function startsWith(obj,group_title){
+function titleStartsWith(obj,group){
+    const group_title=group.title;
     const start=obj.sw;
     if (Array.isArray(start) ) {
         return start.some( item => group_title.startsWith(item));
@@ -175,7 +177,7 @@ class tabGroupController {
     static async #moveGroupsToWindowByStrategy(windowId, strategy, obj ){
         const tabGroups= await chrome.tabGroups.query({});
         tabGroups
-            .filter( group => strategy(obj,group.title) )
+            .filter( group => strategy(obj,group) )
             .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: or else api will error.
             .forEach(
                 group => {
@@ -189,11 +191,11 @@ class tabGroupController {
     }
 
     static async moveGroupsToWindowByName(windowId, listOfNames ){
-        this.#moveGroupsToWindowByStrategy(windowId, listIncludes, listOfNames );
+        this.#moveGroupsToWindowByStrategy(windowId, listIncludesTitle, listOfNames );
     }
 
     static async moveGroupsToWindowByStartsWith(windowId, obj ){
-        this.#moveGroupsToWindowByStrategy(windowId, startsWith, obj );
+        this.#moveGroupsToWindowByStrategy(windowId, titleStartsWith, obj );
     }
 
     static async moveGroupsToWindow(windowId, obj ){

@@ -3,8 +3,12 @@ body {
 }
 
 /*fold*/
-input[type="checkbox"]:not(:checked) + .hide-me{
-    display:none;
+.hide-me {
+    display: none;
+}
+.foldable input[type="checkbox"]:checked + .hide-me,
+.foldable:hover .hide-me{
+    display:revert; 
 }
 .foldable h1{
     display: inline-block;

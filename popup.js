@@ -313,13 +313,13 @@ class Buttons extends Observer{
         const target="#group-selector";
         chrome.tabGroups.query({})
             .then(
-                tabs => {
-                    const iterable=
-                          tabs
+                groups => {
+                    const name_value_s=
+                          groups
                           .toSorted( (a,b) => a.title.localeCompare(b.title) )
                           .map( tab => ({"name":tab.title, "value":[tab.title]}))
                     ;
-                    this.#enable_item_buttons(iterable, target);
+                    this.#enable_item_buttons(name_value_s, target);
                 }
             )
         ;

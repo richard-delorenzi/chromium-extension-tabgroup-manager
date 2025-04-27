@@ -310,6 +310,10 @@ class Buttons extends Observer{
     }
     
     enable_raw_group_buttons(){
+        function is_uniq(value,index,array){
+            //assumes sorted
+            return (index ===0) || (value.name !== array[index-1].name);
+        }
         const target="#group-selector";
         chrome.tabGroups.query({})
             .then(
@@ -318,6 +322,7 @@ class Buttons extends Observer{
                           groups
                           .toSorted( (a,b) => a.title.localeCompare(b.title) )
                           .map( tab => ({"name":tab.title, "value":[tab.title]}))
+                          .filter(is_uniq)
                     ;
                     this.#enable_item_buttons(name_value_s, target);
                 }

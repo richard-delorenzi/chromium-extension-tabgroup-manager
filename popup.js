@@ -181,10 +181,10 @@ class tabGroupController {
               .filter( group => strategy(obj,group) )
               .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: or else api will error.
         ;
-        debug_heading("all");
-        debug(allTabGroups.map(tg => tg.title));
-        debug_heading("filtered");
-        debug(tabGroups.map(tg => tg.title));
+        //debug_heading("all");
+        //debug(allTabGroups.map(tg => tg.title));
+        //debug_heading("filtered");
+        //debug(tabGroups.map(tg => tg.title));
         for (const group of tabGroups){
             await chrome.tabGroups.move(
                 group.id,

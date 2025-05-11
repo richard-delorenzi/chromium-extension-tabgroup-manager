@@ -173,59 +173,64 @@ function titleStartsWith(obj,group){
 }
 
 class tabGroupController {
-    
-    static async #moveGroupsToWindowByStrategy(windowId, strategy, obj ){
-        const allTabGroups= await chrome.tabGroups.query({});
-        const tabGroups=
-              allTabGroups
-              .filter( group => strategy(obj,group) )
-              .filter( group => group.windowId != windowId ) //:workaround: filter out null-operation ish: or else api will error.
-        ;
-        for (const group of tabGroups){
-            await chrome.tabGroups.move(
-                group.id,
-                { index: -1, windowId}
+    static #opQueue = Promise.resolve(); // private operation queue
+
+    // Helper to enqueue serialized operations
+    static #enqueue(task) {
+        this.#opQueue = this.#opQueue.then(() => task()).catch(console.error);
+        return this.#opQueue;
+    }
+
+    static async #moveGroupsToWindowByStrategy(windowId, strategy, obj) {
+        const allTabGroups = await chrome.tabGroups.query({});
+        const tabGroups = allTabGroups
+            .filter(group => strategy(obj, group))
+            .filter(group => group.windowId != windowId);
+
+        for (const group of tabGroups) {
+            await chrome.tabGroups.move(group.id, { index: -1, windowId });
+        }
+    }
+
+    static async moveGroupsToWindowByName(windowId, listOfNames) {
+        return await this.#moveGroupsToWindowByStrategy(windowId, listIncludesTitle, listOfNames);
+    }
+
+    static async moveGroupsToWindowByStartsWith(windowId, obj) {
+        return await this.#moveGroupsToWindowByStrategy(windowId, titleStartsWith, obj);
+    }
+
+    static async moveGroupsToWindow(windowId, obj) {
+        if (obj === EveryThing) {
+            const current_window = await chrome.windows.getCurrent();
+            return await this.#moveGroupsToWindowByStrategy(
+                windowId,
+                (o, group) => group.windowId === current_window.id,
+                obj
             );
+        } else if (Array.isArray(obj)) {
+            return await this.moveGroupsToWindowByName(windowId, obj);
+        } else {
+            return await this.moveGroupsToWindowByStartsWith(windowId, obj);
         }
     }
 
-    static async moveGroupsToWindowByName(windowId, listOfNames ){
-        this.#moveGroupsToWindowByStrategy(windowId, listIncludesTitle, listOfNames );
+    static hide(obj = EveryThing) {
+        this.#enqueue(async () => {
+            const windowId = await StoreWindow.Id();
+            return await this.moveGroupsToWindow(windowId, obj);
+        });
     }
 
-    static async moveGroupsToWindowByStartsWith(windowId, obj ){
-        this.#moveGroupsToWindowByStrategy(windowId, titleStartsWith, obj );
+    static show(obj = EveryThing) {
+        this.#enqueue(async () => {
+            const windowId = (await chrome.windows.getCurrent()).id;
+            return await this.moveGroupsToWindow(windowId, obj);
+        });
     }
 
-    static async moveGroupsToWindow(windowId, obj ){
-        if (obj === EveryThing){
-            chrome.windows.getCurrent()
-                .then( current_window => {
-                    this.#moveGroupsToWindowByStrategy(
-                        windowId,
-                        (o,group)=> group.windowId === current_window.id,
-                        obj
-                    );
-                })
-            ;
-        }else if (Array.isArray(obj)){
-            this.moveGroupsToWindowByName(windowId,obj);
-        }else{
-            this.moveGroupsToWindowByStartsWith(windowId,obj);
-        }
-    }
-    
-    static async hide(obj=EveryThing){
-        const windowId=await StoreWindow.Id();
-        this.moveGroupsToWindow(windowId, obj );
-    }
-    
-    static async show(obj=EveryThing){
-        const windowId=(await chrome.windows.getCurrent()).id;
-        this.moveGroupsToWindow(windowId, obj );
-    }
-    static async only(obj=EveryThing){
-        await this.hide();
+    static only(obj = EveryThing) { 
+        this.hide();
         this.show(obj);
     }
 }

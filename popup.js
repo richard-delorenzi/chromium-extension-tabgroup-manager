@@ -229,8 +229,8 @@ class tabGroupController {
         this.moveGroupsToWindow(windowId, obj );
     }
     static async only(obj=EveryThing){
-        await tabGroupController.hide();
-        tabGroupController.show(obj);
+        await this.hide();
+        this.show(obj);
     }
 }
 

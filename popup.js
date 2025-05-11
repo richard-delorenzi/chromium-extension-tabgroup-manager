@@ -228,6 +228,10 @@ class tabGroupController {
         const windowId=(await chrome.windows.getCurrent()).id;
         this.moveGroupsToWindow(windowId, obj );
     }
+    static async only(obj=EveryThing){
+        await tabGroupController.hide();
+        tabGroupController.show(obj);
+    }
 }
 
 class Buttons extends Observer{
@@ -265,8 +269,7 @@ class Buttons extends Observer{
             console.log(data);
             const key="d:"+day;
             const value=data[key];
-            await tabGroupController.hide();
-            tabGroupController.show(value);
+            tabGroupController.only(value);
         });
         document.querySelector('#mode #today-target').replaceChildren(button);
         document.querySelector('#mode #toggle-week').addEventListener('click', async () => {
@@ -289,8 +292,7 @@ class Buttons extends Observer{
                     tabGroupController.show(item.value);
                 });
                 buttons.querySelector("button#only").addEventListener('click', async () => {
-                    await tabGroupController.hide();
-                    tabGroupController.show(item.value);
+                    tabGroupController.only(item.value);
                 });
                 
                 output.append(buttons);

@@ -14,6 +14,8 @@ However, we have not ruled out the idea of storing meta tab-groups in a tree.
 ## Bugs and problems
 The ability to close tabs and bring them back, would be a good back-end for this extension. However at present there is no API for it. So for now, we are storing hidden tabs in another window. The user will have to hide this other window (minimise, iconify, move to another desktop, or tell your window manager to un-map it).
 
+see also [Todo](todo.md)
+
 ## Licence
 [Gnu GPL](https://www.gnu.org/licenses/gpl-3.0.en.html) — If you distribute copies of this program, then you must tell your users where you got it (all of the official sources below), and show them the licence.
 

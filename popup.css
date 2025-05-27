@@ -86,7 +86,7 @@ body {
 }
 
 /*experimental — manual options for now*/
-#fold-groups, #make-sleepable, #sleep {
-    background: pink;
+.sleep button {background: pink;}
+#make-sleepable, #sleep {
     display: none; /*not yet implemented*/
 }

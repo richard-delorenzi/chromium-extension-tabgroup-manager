@@ -233,6 +233,21 @@ class tabGroupController {
         this.hide();
         this.show(obj);
     }
+
+    static async foldGroups(){
+        const groups = await chrome.tabGroups.query({});
+        groups.forEach(
+            item => {
+                this.foldTabGroup(item.id);
+            }
+        );
+    }
+    static async foldTabGroup(tabGroupId){
+        await chrome.tabGroups.update(
+            tabGroupId,
+            {collapsed:true}
+        );
+    }
 }
 
 class Buttons extends Observer{
@@ -250,6 +265,13 @@ class Buttons extends Observer{
         this.enable_set_buttons('#meta-group-selector',"g:");
         this.enable_set_buttons('#tab-day-selector',"d:");
         this.enable_raw_group_buttons();
+        this.enable_sleep_buttons();
+    }
+
+    enable_sleep_buttons(){
+        document.querySelector('#fold-groups').addEventListener('click', async () => {
+            tabGroupController.foldGroups();
+        });
     }
 
     enable_hide_show_all(){

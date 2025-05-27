@@ -243,10 +243,13 @@ class tabGroupController {
         );
     }
     static async foldTabGroup(tabGroupId){
-        await chrome.tabGroups.update(
+        chrome.tabGroups.update(
             tabGroupId,
             {collapsed:true}
         );
+    }
+    static async request_discard(){
+        await chrome.tabs.discard();
     }
 }
 
@@ -271,6 +274,9 @@ class Buttons extends Observer{
     enable_sleep_buttons(){
         document.querySelector('#fold-groups').addEventListener('click', async () => {
             tabGroupController.foldGroups();
+        });
+        document.querySelector('#request-discard').addEventListener('click', async () => {
+            tabGroupController.request_discard();
         });
     }
 

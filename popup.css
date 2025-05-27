@@ -24,13 +24,14 @@ body {
     display: inline-block;
 }
 
-/*section*/
+/*sections*/
 .meta-group{
     background-color:Gainsboro;
 }
 .meta-group:nth-child(2n){
     background-color: whitesmoke;
 }
+
 
 #setup {
 

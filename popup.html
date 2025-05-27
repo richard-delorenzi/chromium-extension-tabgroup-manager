@@ -18,11 +18,6 @@
       </ul>
       <button id="toggle-week">Toggle Week</button>
     </section>
-
-    <section id="days" class="meta-group days foldable">
-      <h1>Days</h1><input type="checkbox">
-      <div id="tab-day-selector" class="hide-me"><div>
-    </section>
     
     <section id="meta" class="meta-group foldable">
       <h1>Meta Groups</h1>
@@ -35,15 +30,11 @@
       <input type="checkbox">
       <div id="group-selector" class="hide-me"></div>
     </section>
-    
-    <template id="button-item">
-      <li>
-        <button id="hide">Hide</button>
-        <button id="show">Show</button>
-        <button id="only">Only</button>
-        <span id="name"></span>
-      </li>
-    </template>
+
+    <section id="days" class="meta-group days foldable">
+      <h1>Days</h1><input type="checkbox">
+      <div id="tab-day-selector" class="hide-me"><div>
+    </section>
 
     <section id="setup" class="foldable">
       <h1>Setup</h1>
@@ -111,6 +102,15 @@
         </section>
       </div> <!--end hide-me-->
     </section>
+
+    <template id="button-item">
+      <li>
+        <button id="hide">Hide</button>
+        <button id="show">Show</button>
+        <button id="only">Only</button>
+        <span id="name"></span>
+      </li>
+    </template>
 
     <!-- debug stuff -->
     <div id="output"></div>

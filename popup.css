@@ -32,7 +32,6 @@ body {
     background-color: whitesmoke;
 }
 
-
 #setup {
 
     /*create*/
@@ -84,4 +83,10 @@ body {
     }
 
     /*  */
+}
+
+/*experimental — manual options for now*/
+#fold-groups, #make-sleepable, #sleep {
+    background: pink;
+    display: none; /*not yet implemented*/
 }

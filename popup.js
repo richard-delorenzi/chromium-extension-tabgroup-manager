@@ -249,7 +249,21 @@ class tabGroupController {
         );
     }
     static async request_discard(){
-        await chrome.tabs.discard();
+        chrome.tabs.discard();
+    }
+
+    static async discard_hidden(){
+        const store_window_id = await StoreWindow.Id();
+        chrome.tabs.query({}).then(
+            tabs => {
+                tabs
+                    .filter(tab => tab.windowId === store_window_id)
+                    .forEach(tab => {
+                        chrome.tabs.discard(tab.id);
+                    })
+                ;
+            }
+        );
     }
 }
 
@@ -277,6 +291,9 @@ class Buttons extends Observer{
         });
         document.querySelector('#request-discard').addEventListener('click', async () => {
             tabGroupController.request_discard();
+        });
+        document.querySelector('#discard-hidden').addEventListener('click', async () => {
+            tabGroupController.discard_hidden();
         });
     }
 

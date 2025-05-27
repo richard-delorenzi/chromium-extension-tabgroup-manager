@@ -87,6 +87,3 @@ body {
 
 /*experimental — manual options for now*/
 .sleep button {background: pink;}
-#make-discardable-hidden, #discard-hidden{
-    display: none; /*not yet implemented*/
-}

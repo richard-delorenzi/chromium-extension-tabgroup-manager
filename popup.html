@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./popup.css" />
   </head>
-  <body>
+  <body id="sections">
     <section id="mode">
-      <h1>Mode</h1>
       <template id="today-button">
         <li><button id="today">Today <span id="day">status</span></button></li>
       </template>
@@ -20,18 +19,18 @@
       <button id="toggle-week">Toggle Week</button>
     </section>
 
-    <section class="meta-group days foldable">
+    <section id="days" class="meta-group days foldable">
       <h1>Days</h1><input type="checkbox">
       <div id="tab-day-selector" class="hide-me"><div>
     </section>
     
-    <section class="meta-group foldable">
+    <section id="meta" class="meta-group foldable">
       <h1>Meta Groups</h1>
       <input type="checkbox">
       <div id="meta-group-selector" class="hide-me"></div>
     </section>
 
-    <section class="meta-group foldable">
+    <section id="raw" class="meta-group foldable">
       <h1>Raw Groups</h1>
       <input type="checkbox">
       <div id="group-selector" class="hide-me"></div>
@@ -127,7 +126,6 @@
       </li>
     </template>
    
-
     <script src="./popup.js" type="module"></script>
   </body>
 </html>

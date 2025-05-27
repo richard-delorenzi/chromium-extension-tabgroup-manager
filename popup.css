@@ -2,6 +2,16 @@ body {
     min-width: 20em;
 }
 
+#mode ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    #show-all {
+        /*not working*/
+        display: none;
+    }
+}
+
 /*fold*/
 .hide-me {
     display: none;

@@ -13,15 +13,16 @@ body {
 }
 
 /*fold*/
-.hide-me {
+.hide-me,
+.foldable input[type="checkbox"]{
     display: none;
 }
-.foldable input[type="checkbox"]:checked + .hide-me,
-.foldable:hover .hide-me{
+.foldable :has(input[type="checkbox"]:checked) + .hide-me,
+.zfoldable:hover .hide-me{
     display:revert; 
 }
 .foldable h1{
-    display: inline-block;
+    zdisplay: inline-block;
 }
 
 /*sections*/

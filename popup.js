@@ -316,7 +316,7 @@ class Buttons extends Observer{
             tabGroupController.only(value);
         });
         document.querySelector('#mode #today-target').replaceChildren(button);
-        document.querySelector('#mode #toggle-week').addEventListener('click', async () => {
+        document.querySelector('#toggle-week').addEventListener('click', async () => {
             Factory.the.time.toggleWeekParity();
         });
     }

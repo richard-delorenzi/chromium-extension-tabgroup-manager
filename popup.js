@@ -289,11 +289,9 @@ class Buttons extends Observer{
         document.querySelector('#fold-groups').addEventListener('click', async () => {
             tabGroupController.foldGroups();
         });
-        document.querySelector('#request-discard').addEventListener('click', async () => {
-            tabGroupController.request_discard();
-        });
         document.querySelector('#discard-hidden').addEventListener('click', async () => {
             tabGroupController.discard_hidden();
+            tabGroupController.request_discard();
         });
     }
 
